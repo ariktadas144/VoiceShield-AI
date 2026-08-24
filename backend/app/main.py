@@ -4,7 +4,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.routes import audio
+from app.api.routes import audio, stream
 from app.services.deepfake_service import warm_up
 
 logging.basicConfig(level=logging.INFO)
@@ -30,6 +30,7 @@ app.add_middleware(
 )
 
 app.include_router(audio.router, prefix="/api")
+app.include_router(stream.router, prefix="/api")
 
 
 @app.get("/")
@@ -39,17 +40,32 @@ def read_root():
 
 @app.get("/health")
 def health():
-    """Surfaces whether the detector is actually loaded, so a degraded
-    deployment is visible instead of silently scoring everything as genuine."""
-    from app.services.deepfake_service import get_predictor
+    """Surfaces which detector is live and whether it has been validated, so a
+    degraded or demo deployment is visible instead of silently scoring."""
+    from app.services.deepfake_service import backend_name, get_predictor
 
-    predictor = get_predictor()
+    def _window_seconds(det):
+        if det is None:
+            return None
+        n = getattr(det, "window_samples", None)
+        if not n:
+            fe = getattr(det, "front_end", None)
+            n = getattr(fe, "segment_samples", None) if fe is not None else None
+        return round(n / 16000, 2) if n else None
+
+    d = get_predictor()
     return {
         "status": "ok",
-        "deepfake_model": {
-            "loaded": predictor is not None,
-            "checkpoint": predictor.checkpoint_path.name if predictor else None,
-            "dev_eer": predictor.dev_eer if predictor else None,
-            "device": predictor.device if predictor else None,
+        "detector": {
+            "backend": backend_name(),
+            "loaded": d is not None,
+            "model": getattr(d, "name", None) or getattr(d, "checkpoint_path", None) and str(
+                getattr(d, "checkpoint_path").name),
+            "validated": bool(getattr(d, "validated", d is not None)),
+            "window_seconds": _window_seconds(d),
+            "dev_eer": getattr(d, "dev_eer", None),
+            "note": None if backend_name() == "fusion" else
+                    "Dhwani is UNVALIDATED on in-domain data" if backend_name() == "dhwani" else
+                    "DEMO MODE — scores are placeholders, not measurements",
         },
     }

@@ -1,4 +1,22 @@
+# Backend runtime — CPU only, no CUDA.
+#
+# The prototype runs the Dhwani ONNX detector, so it needs onnxruntime
+# (~15 MB) rather than torch+CUDA (~2.5 GB). That is also why the Docker image
+# builds at all: ml/requirements-torch.txt pins torch==2.7.1+cu126, and those
+# local-version wheels exist ONLY on the PyTorch CUDA index, never on PyPI.
+# Installing that file with plain `pip install -r` fails.
+#
+# To run the trained fusion model instead, install ml/requirements-torch.txt
+# with --index-url https://download.pytorch.org/whl/cu126 and set
+# VOICESHIELD_DETECTOR=fusion.
 fastapi
-uvicorn
+uvicorn[standard]
 python-multipart
 pydantic
+websockets
+
+# audio front-end (shared with training) + ONNX inference
+numpy
+soundfile
+soxr
+onnxruntime

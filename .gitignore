@@ -35,3 +35,10 @@ ml/artifacts_*.log
 # findings rather than bulk data and ARE tracked.
 data/metadata/labels.csv
 data/metadata/labels_*.csv
+
+# Local prototype clone of a teammate's fork — a separate git repo that lives
+# inside this working tree for convenience. It must never be committed here.
+prototype/
+
+# Third-party model weights (Dhwani ONNX is 1.26 GB). Fetched, not versioned.
+data/external_models/
