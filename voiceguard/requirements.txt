@@ -1,0 +1,17 @@
+# VoiceGuard — Indic adaptation.
+# Exact pins from the environment these were verified working on (Python 3.11.16).
+# The original file was UTF-16 encoded (pip install -r fails on it) and pinned
+# torch==2.0.1, where torch.load defaults to weights_only=False -> checkpoint RCE.
+# The original is in git history (commit 88c0f44).
+
+torch==2.7.1
+torchaudio==2.7.1
+numpy==2.1.3
+librosa==0.11.0
+soundfile==0.13.1
+scipy==1.15.3
+PyYAML==6.0.2
+tqdm==4.67.1
+
+# Indic dataset access (SherryT997/IndicTTS-Deepfake-Challenge-Data)
+datasets==3.6.0

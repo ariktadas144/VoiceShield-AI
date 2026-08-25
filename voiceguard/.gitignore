@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+
+# Pretrained weights are vendored by checksum, not committed (70.5 MB).
+# See weights/PROVENANCE.md for the source URL and SHA-256.
+weights/*.pth
+*.pth
+
+# Generated Indic manifests and cached audio
+data/indic/
+data/cache/
