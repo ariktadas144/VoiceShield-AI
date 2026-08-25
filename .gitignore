@@ -1,7 +1,11 @@
 node_modules/
 frontend/node_modules/
+.next/
+frontend/.next/
 .env
 .env.*
+!.env.example
+!.env.local.example
 dist/
 build/
 __pycache__/
