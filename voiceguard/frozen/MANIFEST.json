@@ -81,7 +81,7 @@
       }
     }
   },
-  "source_commit": "c7ffa7708badef0630843d9fbe46b39a6a4ed5a3",
+  "source_commit": "6fd1b44ca567e534eec605694852894f85fb21b4",
   "dependency_lock": {
     "path": "requirements.lock.txt",
     "sha256": "30673c2964ea5eb0ca8824a4fd4a0be371a190d80c1b0fa7ca4fabb3a11aed59"
@@ -126,5 +126,6 @@
     },
     "diagnosis": "bonafide-domain overfitting: spoof cues transfer to unseen generators (AUC 0.956) but 76% of genuine speech from an unseen recording domain is flagged synthetic"
   },
-  "immutable": "VoiceGuard-Indic-v0. Do not modify. All later experiments are compared against this checkpoint and this commit."
+  "immutable": "VoiceGuard-Indic-v0. Do not modify. All later experiments are compared against this checkpoint and this commit.",
+  "source_commit_note": "The commit holding the code this checkpoint was produced by. This manifest is committed immediately after it, since a file cannot contain the hash of the commit that introduces it."
 }
