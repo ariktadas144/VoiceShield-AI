@@ -1,0 +1,74 @@
+{
+  "vs_bonafide_train": {
+    "bonafide_ref": {
+      "rms_db": 0.3850875,
+      "peak": 0.36161875,
+      "crest_db": 0.425075,
+      "hf_share": 0.368625,
+      "noise_floor_db": 0.3548375,
+      "silence_frac": 0.72899375,
+      "zcr": 0.51143125,
+      "centroid_hz": 0.30546875,
+      "duration_s": 0.41945625
+    },
+    "spoof_existing": {
+      "rms_db": 0.44899375,
+      "peak": 0.438425,
+      "crest_db": 0.48020625,
+      "hf_share": 0.44715625,
+      "noise_floor_db": 0.5773625,
+      "silence_frac": 0.429503125,
+      "zcr": 0.3414125,
+      "centroid_hz": 0.5090375,
+      "duration_s": 0.53885625
+    },
+    "spring_f5": {
+      "rms_db": 0.447325,
+      "peak": 0.4409125,
+      "crest_db": 0.45816875,
+      "hf_share": 0.3438875,
+      "noise_floor_db": 0.44861875,
+      "silence_frac": 0.424584375,
+      "zcr": 0.36875625,
+      "centroid_hz": 0.40036875,
+      "duration_s": 0.236240625
+    },
+    "indic_mio": {
+      "rms_db": 0.3628375,
+      "peak": 0.36748125,
+      "crest_db": 0.48786875,
+      "hf_share": 0.63031875,
+      "noise_floor_db": 0.47078125,
+      "silence_frac": 0.496409375,
+      "zcr": 0.4239125,
+      "centroid_hz": 0.42525625,
+      "duration_s": 0.296434375
+    }
+  },
+  "classifier_vs_bonafide_train": {
+    "bonafide_ref": {
+      "auc": 0.779184375,
+      "balanced_acc": 0.7012499999999999
+    },
+    "spoof_existing": {
+      "auc": 0.69189375,
+      "balanced_acc": 0.64
+    },
+    "spring_f5": {
+      "auc": 0.8675937499999999,
+      "balanced_acc": 0.77
+    },
+    "indic_mio": {
+      "auc": 0.91645625,
+      "balanced_acc": 0.8300000000000001
+    }
+  },
+  "n": {
+    "bonafide_train": 400,
+    "spoof_existing": 400,
+    "bonafide_ref": 400,
+    "spring_f5": 400,
+    "indic_mio": 400
+  },
+  "trimmed": false
+}

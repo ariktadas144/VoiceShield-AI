@@ -1,0 +1,111 @@
+{
+  "contrasts": [
+    {
+      "name": "A  indic_mio vs spring_f5",
+      "n_pos": 400,
+      "n_neg": 400,
+      "single_feature_auc": {
+        "rms_db": 0.44085,
+        "peak": 0.47854375,
+        "crest_db": 0.51940625,
+        "hf_share": 0.7554,
+        "noise_floor_db": 0.40893125,
+        "silence_frac": 0.6024375,
+        "zcr": 0.62544375,
+        "centroid_hz": 0.52536875,
+        "duration_s": 0.57111875
+      },
+      "worst_feature": "hf_share",
+      "worst_auc": 0.7554,
+      "classifier": {
+        "auc": 0.87946875,
+        "balanced_acc": 0.79
+      },
+      "verdict": "partly separable"
+    },
+    {
+      "name": "B  indic_mio vs bonafide",
+      "n_pos": 400,
+      "n_neg": 400,
+      "single_feature_auc": {
+        "rms_db": 0.4879,
+        "peak": 0.5640875,
+        "crest_db": 0.63168125,
+        "hf_share": 0.73523125,
+        "noise_floor_db": 0.59826875,
+        "silence_frac": 0.396728125,
+        "zcr": 0.527103125,
+        "centroid_hz": 0.61184375,
+        "duration_s": 0.454890625
+      },
+      "worst_feature": "hf_share",
+      "worst_auc": 0.73523125,
+      "classifier": {
+        "auc": 0.90286875,
+        "balanced_acc": 0.8162499999999999
+      },
+      "verdict": "TRIVIALLY SEPARABLE"
+    },
+    {
+      "name": "C  spring_f5 vs bonafide",
+      "n_pos": 400,
+      "n_neg": 400,
+      "single_feature_auc": {
+        "rms_db": 0.5265875,
+        "peak": 0.57828125,
+        "crest_db": 0.6110375,
+        "hf_share": 0.47376875,
+        "noise_floor_db": 0.651375,
+        "silence_frac": 0.327103125,
+        "zcr": 0.4135125,
+        "centroid_hz": 0.58501875,
+        "duration_s": 0.3874375
+      },
+      "worst_feature": "silence_frac",
+      "worst_auc": 0.327103125,
+      "classifier": {
+        "auc": 0.82526875,
+        "balanced_acc": 0.72875
+      },
+      "verdict": "partly separable"
+    },
+    {
+      "name": "D  all spoof vs bonafide",
+      "n_pos": 800,
+      "n_neg": 400,
+      "single_feature_auc": {
+        "rms_db": 0.50724375,
+        "peak": 0.571184375,
+        "crest_db": 0.621359375,
+        "hf_share": 0.6045,
+        "noise_floor_db": 0.624821875,
+        "silence_frac": 0.361915625,
+        "zcr": 0.4703078125,
+        "centroid_hz": 0.59843125,
+        "duration_s": 0.4211640625
+      },
+      "worst_feature": "silence_frac",
+      "worst_auc": 0.361915625,
+      "classifier": {
+        "auc": 0.8208562499999998,
+        "balanced_acc": 0.7375
+      },
+      "verdict": "partly separable"
+    }
+  ],
+  "n_records": 1200,
+  "validation_failures": 0,
+  "features": [
+    "rms_db",
+    "peak",
+    "crest_db",
+    "hf_share",
+    "noise_floor_db",
+    "silence_frac",
+    "zcr",
+    "centroid_hz",
+    "duration_s"
+  ],
+  "resampled_to": 16000,
+  "trimmed": true
+}

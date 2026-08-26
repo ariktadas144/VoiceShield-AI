@@ -1,0 +1,26 @@
+{
+  "SPRINGLab/SPRING_F5": {
+    "revision": "898dd2a56fbb42c994b545fadfdd831eeadfafb0",
+    "local": "generators/spring_f5",
+    "files": 300,
+    "bytes": 5403470085,
+    "license": "apache-2.0",
+    "gated": "False"
+  },
+  "SPRINGLab/Indic-Mio": {
+    "revision": "25feace00ca76c71c40b1e8d921fd3c2943c545e",
+    "local": "generators/indic_mio",
+    "files": 33,
+    "bytes": 1238685722,
+    "license": "apache-2.0",
+    "gated": "False"
+  },
+  "Aratako/MioCodec-25Hz-24kHz": {
+    "revision": "3a737f0de2c6324cb2fe40c1fbd1056c7add423d",
+    "local": "generators/miocodec",
+    "files": 15,
+    "bytes": 523100680,
+    "license": "mit",
+    "gated": "False"
+  }
+}

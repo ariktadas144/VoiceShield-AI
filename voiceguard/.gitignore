@@ -10,3 +10,12 @@ weights/*.pth
 # Generated Indic manifests and cached audio
 data/indic/
 data/cache/
+
+# Pilot audio is reproducible from the manifests: every clip records its generator
+# revision, per-clip seed and sha256. 339 MB of wav stays on disk, out of git.
+data/pilot_refs/audio/
+data/pilot_spoof/*/audio/
+generators/*/*.safetensors
+generators/*/*.pt
+generators/*/*.onnx
+.venv-gen/

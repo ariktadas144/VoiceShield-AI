@@ -1,0 +1,135 @@
+
+==============================================================================
+VALIDATION
+==============================================================================
+
+bonafide: 400 files, sample rates [16000, 48000]
+    unreadable                  0
+    non-finite                  0
+    multi-channel               0
+    all-silent                  0
+    clipped (peak>=0.999)       1  <-- check
+    under 0.5 s                 0
+
+indic_mio: 400 files, sample rates [24000]
+    unreadable                  0
+    non-finite                  0
+    multi-channel               0
+    all-silent                  0
+    clipped (peak>=0.999)       0
+    under 0.5 s                 0
+
+spring_f5: 400 files, sample rates [24000]
+    unreadable                  0
+    non-finite                  0
+    multi-channel               0
+    all-silent                  0
+    clipped (peak>=0.999)      22  <-- check
+    under 0.5 s                 0
+
+==============================================================================
+FEATURE DISTRIBUTIONS   (min  p10  p25  median  p75  p90  max)
+==============================================================================
+
+rms_db
+  bonafide      -40.726   -33.531   -29.903   -24.206   -20.619   -17.693    -9.929
+  indic_mio     -33.361   -27.609   -26.434   -25.062   -23.126   -21.558   -15.736
+  spring_f5     -39.222   -33.411   -28.642   -23.350   -20.312   -17.959   -12.380
+
+peak
+  bonafide        0.045     0.139     0.203     0.353     0.622     0.794     1.000
+  indic_mio       0.142     0.281     0.331     0.399     0.484     0.550     1.009
+  spring_f5       0.061     0.166     0.234     0.409     0.755     0.979     1.009
+
+crest_db
+  bonafide        8.376    12.753    13.944    15.394    17.247    18.723    22.748
+  indic_mio      10.636    13.621    15.008    16.583    18.559    20.068    22.924
+  spring_f5       9.550    13.535    14.743    16.426    18.515    20.204    24.230
+
+hf_share
+  bonafide        0.000     0.000     0.001     0.002     0.005     0.010     0.049
+  indic_mio       0.000     0.001     0.003     0.006     0.013     0.026     0.208
+  spring_f5       0.000     0.000     0.001     0.002     0.005     0.008     0.025
+
+noise_floor_db
+  bonafide     -104.390   -77.538   -72.620   -64.483   -45.436   -36.271   -23.727
+  indic_mio     -80.752   -70.059   -63.677   -53.961   -45.808   -41.949   -32.589
+  spring_f5     -92.405   -71.658   -63.633   -48.195   -40.052   -34.341   -24.743
+
+silence_frac
+  bonafide        0.000     0.016     0.049     0.133     0.212     0.293     0.600
+  indic_mio       0.000     0.033     0.054     0.089     0.134     0.186     0.267
+  spring_f5       0.000     0.007     0.028     0.068     0.126     0.170     0.362
+
+zcr
+  bonafide        0.033     0.057     0.076     0.093     0.117     0.140     0.465
+  indic_mio       0.043     0.069     0.081     0.098     0.114     0.127     0.435
+  spring_f5       0.033     0.054     0.067     0.087     0.103     0.119     0.192
+
+centroid_hz
+  bonafide      186.568   285.655   357.360   453.621   539.718   617.427  1027.539
+  indic_mio     189.727   322.297   399.295   507.947   607.827   699.542  2908.397
+  spring_f5     197.059   311.250   382.764   480.051   597.330   698.757  1045.574
+
+duration_s
+  bonafide        1.328     2.231     2.930     4.192     5.964     7.824    11.368
+  indic_mio       1.256     2.112     2.730     3.808     5.522     7.291    12.776
+  spring_f5       0.773     1.707     2.256     3.449     5.100     6.730    11.376
+
+==============================================================================
+CONTRASTS   (AUC 0.5 = feature carries no information; 1.0 or 0.0 = perfect)
+==============================================================================
+
+--- A  indic_mio vs spring_f5   (400 vs 400) ---
+    feature              AUC   |AUC-0.5|
+    rms_db             0.441       0.059
+    peak               0.479       0.021
+    crest_db           0.519       0.019
+    hf_share           0.755       0.255  <-- SHORTCUT
+    noise_floor_db     0.409       0.091
+    silence_frac       0.602       0.102  <-- watch
+    zcr                0.625       0.125  <-- watch
+    centroid_hz        0.525       0.025
+    duration_s         0.571       0.071
+    trivial classifier (5-fold CV, 9 features): AUC=0.879 balanced_acc=0.790  -> partly separable
+
+--- B  indic_mio vs bonafide   (400 vs 400) ---
+    feature              AUC   |AUC-0.5|
+    rms_db             0.488       0.012
+    peak               0.564       0.064
+    crest_db           0.632       0.132  <-- watch
+    hf_share           0.735       0.235  <-- SHORTCUT
+    noise_floor_db     0.598       0.098
+    silence_frac       0.397       0.103  <-- watch
+    zcr                0.527       0.027
+    centroid_hz        0.612       0.112  <-- watch
+    duration_s         0.455       0.045
+    trivial classifier (5-fold CV, 9 features): AUC=0.903 balanced_acc=0.816  -> TRIVIALLY SEPARABLE
+
+--- C  spring_f5 vs bonafide   (400 vs 400) ---
+    feature              AUC   |AUC-0.5|
+    rms_db             0.527       0.027
+    peak               0.578       0.078
+    crest_db           0.611       0.111  <-- watch
+    hf_share           0.474       0.026
+    noise_floor_db     0.651       0.151  <-- watch
+    silence_frac       0.327       0.173  <-- watch
+    zcr                0.414       0.086
+    centroid_hz        0.585       0.085
+    duration_s         0.387       0.113  <-- watch
+    trivial classifier (5-fold CV, 9 features): AUC=0.825 balanced_acc=0.729  -> partly separable
+
+--- D  all spoof vs bonafide   (800 vs 400) ---
+    feature              AUC   |AUC-0.5|
+    rms_db             0.507       0.007
+    peak               0.571       0.071
+    crest_db           0.621       0.121  <-- watch
+    hf_share           0.605       0.105  <-- watch
+    noise_floor_db     0.625       0.125  <-- watch
+    silence_frac       0.362       0.138  <-- watch
+    zcr                0.470       0.030
+    centroid_hz        0.598       0.098
+    duration_s         0.421       0.079
+    trivial classifier (5-fold CV, 9 features): AUC=0.821 balanced_acc=0.738  -> partly separable
+
+wrote data/pilot_spoof/audit_trim.json

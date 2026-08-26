@@ -1,0 +1,16 @@
+{
+  "model": "checkpoints_v1/best_model.pth",
+  "threshold": 0.17687445878982544,
+  "cutoffs": [
+    "none",
+    "4000",
+    "2000"
+  ],
+  "flagged_rate": {
+    "bonafide": {
+      "none": 0.1725,
+      "4000": 0.1575,
+      "2000": 0.1775
+    }
+  }
+}

@@ -1,0 +1,37 @@
+==============================================================================
+GATE 1  no reference comes from a held-out split
+==============================================================================
+  references traced to indic 'train' split:  100   (allowed)
+  references traced to indic 'dev' split:    0   OK
+  references traced to indic 'test' split:    0   OK
+  references not in the indic manifest at all :  300   (OpenSLR -- never part of any VoiceGuard split)
+
+==============================================================================
+GATE 2  no reference comes from external evaluation material
+==============================================================================
+  data/external2          1800 rows  held-out= 1800  held-out overlap: name=0 sha=0   OK
+  data/mixed              9912 rows  held-out= 2975  held-out overlap: name=0 sha=0   OK   [100 train-split overlaps, allowed]
+
+==============================================================================
+GATE 3  every generated clip traces to a declared reference
+==============================================================================
+  spring_f5        400 clips  orphan=0 ref-mismatch=0 duplicate-ids=0   OK
+  indic_mio        400 clips  orphan=0 ref-mismatch=0 duplicate-ids=0   OK
+
+==============================================================================
+GATE 4  the two generators really did receive identical inputs
+==============================================================================
+  items in both: 400   only in spring_f5: 0   only in indic_mio: 0
+  shared items differing in reference or text: 0   OK
+
+==============================================================================
+DELIBERATE OVERLAPS  (recorded, not defects)
+==============================================================================
+  reference sources: {'SherryT997': 100, 'OpenSLR': 300}
+  Hindi references inside VoiceGuard v1 training bonafide: 100
+    -> Hindi rows are IN-DOMAIN for v1. They are not unseen-speaker evidence.
+  speakers per language: {'Hindi': 100, 'Malayalam': 41, 'Tamil': 50, 'Telugu': 47}
+  every reference speaker appears as bonafide AND as a cloned voice: by design
+
+==============================================================================
+RESULT: all gates passed -- no held-out material was consumed

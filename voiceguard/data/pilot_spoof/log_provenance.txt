@@ -1,0 +1,7 @@
+[2026-08-26 19:07:16,617] WARNING miocodec: FlashAttention is not installed. Falling back to PyTorch SDPA implementation. There is no warranty that the model will work correctly.
+wrote data/pilot_spoof/PROVENANCE.json
+  SPRINGLab/SPRING_F5                rev=898dd2a56fbb lic=apache-2.0
+  SPRINGLab/Indic-Mio                rev=25feace00ca7 lic=apache-2.0
+  Aratako/MioCodec-25Hz-24kHz        rev=3a737f0de2c6 lic=mit
+  spring_f5                          400 clips, 400 seeds
+  indic_mio                          400 clips, 400 seeds

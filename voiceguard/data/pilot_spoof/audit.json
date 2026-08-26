@@ -1,0 +1,111 @@
+{
+  "contrasts": [
+    {
+      "name": "A  indic_mio vs spring_f5",
+      "n_pos": 400,
+      "n_neg": 400,
+      "single_feature_auc": {
+        "rms_db": 0.435625,
+        "peak": 0.47854375,
+        "crest_db": 0.527975,
+        "hf_share": 0.75515,
+        "noise_floor_db": 0.49853125,
+        "silence_frac": 0.640296875,
+        "zcr": 0.56613125,
+        "centroid_hz": 0.525675,
+        "duration_s": 0.5857
+      },
+      "worst_feature": "hf_share",
+      "worst_auc": 0.75515,
+      "classifier": {
+        "auc": 0.8856625,
+        "balanced_acc": 0.7987500000000001
+      },
+      "verdict": "partly separable"
+    },
+    {
+      "name": "B  indic_mio vs bonafide",
+      "n_pos": 400,
+      "n_neg": 400,
+      "single_feature_auc": {
+        "rms_db": 0.532575,
+        "peak": 0.5640875,
+        "crest_db": 0.55641875,
+        "hf_share": 0.735325,
+        "noise_floor_db": 0.672409375,
+        "silence_frac": 0.19565625,
+        "zcr": 0.41775,
+        "centroid_hz": 0.61175625,
+        "duration_s": 0.351584375
+      },
+      "worst_feature": "silence_frac",
+      "worst_auc": 0.19565625,
+      "classifier": {
+        "auc": 0.9585062499999999,
+        "balanced_acc": 0.88375
+      },
+      "verdict": "TRIVIALLY SEPARABLE"
+    },
+    {
+      "name": "C  spring_f5 vs bonafide",
+      "n_pos": 400,
+      "n_neg": 400,
+      "single_feature_auc": {
+        "rms_db": 0.56145,
+        "peak": 0.57828125,
+        "crest_db": 0.525775,
+        "hf_share": 0.47388125,
+        "noise_floor_db": 0.6059,
+        "silence_frac": 0.14328125,
+        "zcr": 0.3705625,
+        "centroid_hz": 0.58465625,
+        "duration_s": 0.281734375
+      },
+      "worst_feature": "silence_frac",
+      "worst_auc": 0.14328125,
+      "classifier": {
+        "auc": 0.94840625,
+        "balanced_acc": 0.8787499999999999
+      },
+      "verdict": "TRIVIALLY SEPARABLE"
+    },
+    {
+      "name": "D  all spoof vs bonafide",
+      "n_pos": 800,
+      "n_neg": 400,
+      "single_feature_auc": {
+        "rms_db": 0.5470125,
+        "peak": 0.571184375,
+        "crest_db": 0.541096875,
+        "hf_share": 0.604603125,
+        "noise_floor_db": 0.6391546875,
+        "silence_frac": 0.16946875,
+        "zcr": 0.39415625,
+        "centroid_hz": 0.59820625,
+        "duration_s": 0.316659375
+      },
+      "worst_feature": "silence_frac",
+      "worst_auc": 0.16946875,
+      "classifier": {
+        "auc": 0.936075,
+        "balanced_acc": 0.8531249999999999
+      },
+      "verdict": "TRIVIALLY SEPARABLE"
+    }
+  ],
+  "n_records": 1200,
+  "validation_failures": 0,
+  "features": [
+    "rms_db",
+    "peak",
+    "crest_db",
+    "hf_share",
+    "noise_floor_db",
+    "silence_frac",
+    "zcr",
+    "centroid_hz",
+    "duration_s"
+  ],
+  "resampled_to": 16000,
+  "trimmed": false
+}

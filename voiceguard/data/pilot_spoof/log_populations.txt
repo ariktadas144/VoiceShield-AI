@@ -1,0 +1,98 @@
+==============================================================================
+POPULATION MEDIANS   [p25 - p75]
+==============================================================================
+
+rms_db
+  bonafide_train      -22.741  [  -27.470 -   -19.892]  n=400
+  bonafide_ref        -25.812  [  -31.200 -   -21.277]  n=400
+  spoof_existing      -24.631  [  -28.936 -   -20.482]  n=400
+  spring_f5           -23.731  [  -29.115 -   -20.653]  n=400
+  indic_mio           -25.541  [  -26.944 -   -23.595]  n=400
+
+peak
+  bonafide_train        0.497  [    0.310 -     0.780]  n=400
+  bonafide_ref          0.353  [    0.203 -     0.622]  n=400
+  spoof_existing        0.395  [    0.259 -     0.774]  n=400
+  spring_f5             0.409  [    0.234 -     0.755]  n=400
+  indic_mio             0.399  [    0.331 -     0.484]  n=400
+
+crest_db
+  bonafide_train       17.432  [   16.001 -    18.748]  n=400
+  bonafide_ref         16.863  [   15.210 -    18.238]  n=400
+  spoof_existing       17.225  [   15.976 -    18.498]  n=400
+  spring_f5            16.889  [   15.193 -    18.871]  n=400
+  indic_mio            17.091  [   15.569 -    19.099]  n=400
+
+hf_share
+  bonafide_train        0.004  [    0.002 -     0.007]  n=400
+  bonafide_ref          0.002  [    0.001 -     0.005]  n=400
+  spoof_existing        0.003  [    0.002 -     0.006]  n=400
+  spring_f5             0.002  [    0.001 -     0.005]  n=400
+  indic_mio             0.006  [    0.003 -     0.013]  n=400
+
+noise_floor_db
+  bonafide_train      -73.762  [  -80.692 -   -48.027]  n=400
+  bonafide_ref        -78.466  [  -81.870 -   -73.823]  n=400
+  spoof_existing      -71.024  [  -77.265 -   -52.450]  n=400
+  spring_f5           -72.286  [  -85.682 -   -60.078]  n=400
+  indic_mio           -72.793  [  -77.781 -   -66.270]  n=400
+
+silence_frac
+  bonafide_train        0.202  [    0.089 -     0.296]  n=400
+  bonafide_ref          0.319  [    0.237 -     0.423]  n=400
+  spoof_existing        0.186  [    0.030 -     0.256]  n=400
+  spring_f5             0.154  [    0.111 -     0.207]  n=400
+  indic_mio             0.194  [    0.153 -     0.239]  n=400
+
+zcr
+  bonafide_train        0.114  [    0.098 -     0.136]  n=400
+  bonafide_ref          0.114  [    0.096 -     0.154]  n=400
+  spoof_existing        0.103  [    0.083 -     0.119]  n=400
+  spring_f5             0.103  [    0.087 -     0.120]  n=400
+  indic_mio             0.108  [    0.095 -     0.125]  n=400
+
+centroid_hz
+  bonafide_train      552.332  [  458.807 -   626.046]  n=400
+  bonafide_ref        453.497  [  357.366 -   540.881]  n=400
+  spoof_existing      551.254  [  486.447 -   612.651]  n=400
+  spring_f5           480.780  [  382.537 -   597.126]  n=400
+  indic_mio           507.046  [  399.295 -   606.083]  n=400
+
+duration_s
+  bonafide_train        6.500  [    4.589 -     8.289]  n=400
+  bonafide_ref          5.490  [    4.096 -     7.253]  n=400
+  spoof_existing        6.827  [    5.021 -     8.501]  n=400
+  spring_f5             3.776  [    2.512 -     5.469]  n=400
+  indic_mio             4.360  [    3.150 -     6.080]  n=400
+
+==============================================================================
+SINGLE-FEATURE AUC vs bonafide_train
+  spoof_existing is the accepted baseline: match it and nothing new is added
+==============================================================================
+
+feature             bonafide_ref   spoof_existing        spring_f5        indic_mio
+rms_db                    0.385            0.449            0.447            0.363 
+peak                      0.362            0.438            0.441            0.367 
+crest_db                  0.425            0.480            0.458            0.488 
+hf_share                  0.369            0.447            0.344            0.630 
+noise_floor_db            0.355            0.577            0.449            0.471 
+silence_frac              0.729            0.430            0.425            0.496 
+zcr                       0.511            0.341            0.369            0.424 
+centroid_hz               0.305            0.509            0.400            0.425 
+duration_s                0.419            0.539            0.236*           0.296 
+
+  * = |AUC-0.5| >= 0.25, separable on this feature alone
+
+==============================================================================
+TRIVIAL CLASSIFIER vs bonafide_train  (5-fold CV, all features)
+==============================================================================
+  bonafide_ref     AUC=0.779  balanced_acc=0.701   partly separable
+  spoof_existing   AUC=0.692  balanced_acc=0.640   not trivially separable
+  spring_f5        AUC=0.868  balanced_acc=0.770   partly separable
+  indic_mio        AUC=0.916  balanced_acc=0.830   TRIVIALLY SEPARABLE
+
+  accepted baseline (spoof_existing) = 0.692
+  spring_f5        0.868   excess over accepted baseline: +0.176
+  indic_mio        0.916   excess over accepted baseline: +0.225
+
+wrote data/pilot_spoof/populations.json
