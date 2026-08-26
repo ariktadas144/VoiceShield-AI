@@ -1,0 +1,83 @@
+{
+  "threshold": 0.596057116985321,
+  "min_speech": 0.35,
+  "conditions": {
+    "clean speech": {
+      "speech_ratio": 0.8654228855721392,
+      "mean_score": 0.1468354532456336,
+      "median_score": 0.025895697996020317,
+      "flagged_spoof_rate": 0.11666666666666667,
+      "gated": false
+    },
+    "25% leading silence": {
+      "speech_ratio": 0.6449004975124378,
+      "mean_score": 0.2579012153398556,
+      "median_score": 0.05148397572338581,
+      "flagged_spoof_rate": 0.21666666666666667,
+      "gated": false
+    },
+    "50% leading silence": {
+      "speech_ratio": 0.4210199004975125,
+      "mean_score": 0.4407361797755584,
+      "median_score": 0.39546383917331696,
+      "flagged_spoof_rate": 0.36666666666666664,
+      "gated": false
+    },
+    "75% leading silence": {
+      "speech_ratio": 0.2027363184079602,
+      "mean_score": 0.8700434133410454,
+      "median_score": 0.9535810351371765,
+      "flagged_spoof_rate": 0.9166666666666666,
+      "gated": true
+    },
+    "50% trailing silence": {
+      "speech_ratio": 0.4313432835820896,
+      "mean_score": 0.37027686228975654,
+      "median_score": 0.2680256962776184,
+      "flagged_spoof_rate": 0.3,
+      "gated": false
+    },
+    "internal pause 30%": {
+      "speech_ratio": 0.6068407960199005,
+      "mean_score": 0.4639008789478491,
+      "median_score": 0.5182855427265167,
+      "flagged_spoof_rate": 0.4666666666666667,
+      "gated": false
+    },
+    "turn-taking gaps": {
+      "speech_ratio": 0.8041044776119403,
+      "mean_score": 0.19155895012663676,
+      "median_score": 0.041241852566599846,
+      "flagged_spoof_rate": 0.15,
+      "gated": false
+    },
+    "low-energy speech (-30 dB)": {
+      "speech_ratio": 0.8654228855721392,
+      "mean_score": 0.1468354555409557,
+      "median_score": 0.025895685888826847,
+      "flagged_spoof_rate": 0.11666666666666667,
+      "gated": false
+    },
+    "digital silence": {
+      "speech_ratio": 0.0,
+      "mean_score": 0.24156007170677185,
+      "median_score": 0.24156007170677185,
+      "flagged_spoof_rate": 0.0,
+      "gated": true
+    },
+    "white noise": {
+      "speech_ratio": 1.0,
+      "mean_score": 0.0032009636789249877,
+      "median_score": 0.0030983146280050278,
+      "flagged_spoof_rate": 0.0,
+      "gated": false
+    },
+    "50 Hz hum": {
+      "speech_ratio": 1.0,
+      "mean_score": 0.9895603656768799,
+      "median_score": 0.9895603656768799,
+      "flagged_spoof_rate": 1.0,
+      "gated": false
+    }
+  }
+}

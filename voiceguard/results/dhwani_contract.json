@@ -1,0 +1,5 @@
+{
+  "preprocessing": "train",
+  "spoof_index": 1,
+  "auc": 0.5429861111111111
+}
