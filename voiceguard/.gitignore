@@ -19,3 +19,6 @@ generators/*/*.safetensors
 generators/*/*.pt
 generators/*/*.onnx
 .venv-gen/
+data/f5_train/audio/
+data/f5_long/audio/
+data/mixed_f5/*.txt

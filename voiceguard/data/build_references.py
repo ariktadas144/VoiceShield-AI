@@ -105,12 +105,23 @@ def main() -> int:
     p.add_argument("--max-dur", type=float, default=12.0)
     p.add_argument("--min-chars", type=int, default=20)
     p.add_argument("--seed", type=int, default=1234)
+    p.add_argument("--exclude", default="",
+                   help="references.jsonl whose origin clips must NOT be reused")
     args = p.parse_args()
 
     out = Path(args.out)
     (out / "audio").mkdir(parents=True, exist_ok=True)
     rng = random.Random(args.seed)
     rows = []
+
+    # The pilot's 400 references are frozen audit material and their clips are already
+    # generated. Excluding them here keeps the training reference set disjoint, so the
+    # pilot audio can be folded into training as-is without any chance that a reference
+    # ends up paired with two different target texts.
+    used = set()
+    if args.exclude and Path(args.exclude).exists():
+        used = {r["origin_path"] for r in map(json.loads, open(args.exclude))}
+        print(f"excluding {len(used)} references already used by the pilot")
 
     for language in LANGUAGES:
         if language == "Hindi":
@@ -138,6 +149,8 @@ def main() -> int:
             if not cand:
                 continue
             wav, text, s, gender = cand.pop(rng.randrange(len(cand)))
+            if str(wav) in used:
+                continue
             try:
                 info = sf.info(wav)
             except Exception:
@@ -179,7 +192,7 @@ def main() -> int:
         print(f"{language:11s} {len(rs):5d} {len({r['speaker_id'] for r in rs}):9d} "
               f"{statistics.median(r['duration_s'] for r in rs):10.2f}s  {dict(g)}")
     print(f"\nwrote {out}/references.jsonl  ({len(rows)} references)")
-    print("These exact references are used by BOTH generators.")
+    print("Reference set built.")
     sys.stdout.flush()
     os._exit(0)
 

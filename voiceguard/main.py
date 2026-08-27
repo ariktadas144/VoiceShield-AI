@@ -66,12 +66,13 @@ class Dataset_Indic(Dataset):
     """Reads a VoiceGuard-format manifest: one `<path> <label>` per line."""
 
     def __init__(self, manifest, root=None, nb_samp=64_600, sample_rate=16_000,
-                 normalise=True, rawboost=0):
+                 normalise=True, rawboost=0, trim=False):
         self.manifest = Path(manifest)
         self.root = Path(root) if root else self.manifest.parent
         self.nb_samp = nb_samp
         self.sample_rate = sample_rate
         self.normalise = normalise
+        self.trim = trim
         # RawBoost is TRAINING-ONLY. Dev and test construct with rawboost=0, so the
         # numbers they produce describe the model, not the augmentation.
         self.rawboost = rawboost
@@ -97,7 +98,8 @@ class Dataset_Indic(Dataset):
 
         if not self.rawboost:
             # Raw waveform, the same call inference makes. Not hand-crafted features.
-            x = prepare(full, self.nb_samp, self.sample_rate, self.normalise)
+            x = prepare(full, self.nb_samp, self.sample_rate, self.normalise,
+                        trim=self.trim)
             return torch.from_numpy(np.ascontiguousarray(x)).float(), label
 
         # Augmented path. Order matters and mirrors physical reality: a channel acts on
@@ -108,6 +110,9 @@ class Dataset_Indic(Dataset):
         from audio_utils import load_audio, pad, peak_normalise
 
         y = load_audio(full, self.sample_rate, normalise=False)
+        if self.trim:
+            from audio_utils import trim_silence
+            y = trim_silence(y, self.sample_rate)
         y = np.asarray(rawboost.process(y.astype(np.float64), self.sample_rate,
                                         self.rawboost), dtype=np.float32)
         if not np.isfinite(y).all():
@@ -239,7 +244,8 @@ def main() -> int:
     else:
         print("init: random (baseline for the pretrained comparison)")
 
-    common = dict(nb_samp=nb_samp, sample_rate=sample_rate, normalise=args.normalise)
+    common = dict(nb_samp=nb_samp, sample_rate=sample_rate, normalise=args.normalise,
+                  trim=args.trim)
     train_set = Dataset_Indic(manifests / "train.txt", rawboost=args.rawboost, **common)
     dev_set = Dataset_Indic(manifests / "dev.txt", **common)   # never augmented
     print(f"train={len(train_set)}  dev={len(dev_set)}"
@@ -324,7 +330,7 @@ def main() -> int:
             torch.save(
                 {"state_dict": model.state_dict(), "config": cfg, "dev_eer": eer,
                  "threshold": threshold, "epoch": epoch + 1, "seed": args.seed,
-                 "normalise": args.normalise, "init": args.init,
+                 "normalise": args.normalise, "trim": args.trim, "init": args.init,
                  "align_head": args.align_head, "spoof_index": SPOOF_INDEX,
                  "rawboost": args.rawboost, "init_ckpt": args.init_ckpt},
                 Path(args.model_save_path) / "best_model.pth",

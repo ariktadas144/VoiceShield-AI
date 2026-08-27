@@ -40,11 +40,12 @@ def load(path, device):
     return model, blob
 
 
-def score_paths(model, root, items, cfg, device, bs=32, workers=4):
+def score_paths(model, root, items, cfg, device, bs=32, workers=4, trim=False):
     tmp = Path(root) / "_tmp_matrix.txt"
     tmp.write_text("".join(f"{p} {l}\n" for p, l in items))
     ds = Dataset_Indic(tmp, nb_samp=cfg["nb_samp"],
-                       sample_rate=cfg.get("sample_rate", 16_000), normalise=True)
+                       sample_rate=cfg.get("sample_rate", 16_000), normalise=True,
+                       trim=trim)
     out = []
     with torch.no_grad():
         for x, _ in DataLoader(ds, batch_size=bs, num_workers=workers, pin_memory=True):
@@ -110,12 +111,17 @@ def main() -> int:
         name, path = spec.split("=", 1)
         model, blob = load(path, device)
         cfg, thr, si = blob["config"], blob["threshold"], blob.get("spoof_index", 1)
+        # Each model is scored under the audio contract it was TRAINED under. A model
+        # trained on trimmed audio and evaluated on untrimmed audio (or the reverse) is
+        # being asked a different question than it was taught, and the resulting numbers
+        # would say more about the mismatch than about the model.
+        trim = bool(blob.get("trim", False))
         print(f"\n{'='*94}")
         print(f"{name}  --  epoch {blob.get('epoch')}, dev EER {100*blob.get('dev_eer',float('nan')):.2f}%, "
-              f"rawboost={blob.get('rawboost', 0) or 'off'}, own threshold {thr:.6f}")
+              f"rawboost={blob.get('rawboost', 0) or 'off'}, trim={trim}, own threshold {thr:.6f}")
         print("=" * 94)
 
-        sc = {k: score_paths(model, root, items, cfg, device)[:, si]
+        sc = {k: score_paths(model, root, items, cfg, device, trim=trim)[:, si]
               for k, (root, items) in sets.items()}
 
         grid = {
@@ -127,7 +133,8 @@ def main() -> int:
         print(f"{'cell':36s} {'n':>5s} {'EER%':>7s} {'95% CI':>14s} {'AUC':>6s} {'95% CI':>14s} "
               f"{'FPR%':>6s} {'FNR%':>6s} {'P%':>6s} {'R%':>6s} {'Acc%':>6s}")
         results[name] = {"epoch": blob.get("epoch"), "dev_eer": blob.get("dev_eer"),
-                         "threshold": thr, "rawboost": blob.get("rawboost", 0), "cells": {}}
+                         "threshold": thr, "rawboost": blob.get("rawboost", 0),
+                         "trim": trim, "cells": {}}
         for label, (bk, sk) in grid.items():
             c = cell(sc[bk], sc[sk], thr, args.bootstrap, args.seed)
             results[name]["cells"][label[0]] = c

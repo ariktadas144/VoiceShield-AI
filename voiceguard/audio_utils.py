@@ -55,6 +55,33 @@ def load_audio(path, target_sr: int = TARGET_SR, normalise: bool = True) -> np.n
     return peak_normalise(y) if normalise else y
 
 
-def prepare(path, nb_samp: int, target_sr: int = TARGET_SR, normalise: bool = True):
+def trim_silence(y, sr: int, top_db: float = 40.0):
+    """Strip leading and trailing silence.
+
+    This lives in the SHARED front end on purpose. Trimming is a property of the audio
+    contract, not of a class: applying it to synthetic clips only would replace one
+    silence shortcut with its mirror image, and applying it in training but not at
+    inference would mean the deployed model never sees what it was trained on. Every
+    caller gets it or none does.
+
+    Leading silence is not a harmless detail. A classifier trained on leading-silence
+    duration ALONE scores 15.1% EER on ASVspoof (arXiv:2106.12914), and the same paper
+    reports signal models moving from 3.6% to 15.5% EER once silence is trimmed away --
+    the crutch removed, not the model broken. Expect the trimmed run to look worse and
+    be more honest.
+    """
+    import librosa
+    if y.size == 0:
+        return y
+    yt, _ = librosa.effects.trim(y, top_db=top_db, frame_length=512, hop_length=128)
+    # never hand back near-nothing; a clip that is silent by this threshold stays whole
+    return np.ascontiguousarray(yt) if yt.size > sr // 10 else y
+
+
+def prepare(path, nb_samp: int, target_sr: int = TARGET_SR, normalise: bool = True,
+            trim: bool = False):
     """File -> one fixed-length window, ready for RawNet."""
-    return pad(load_audio(path, target_sr, normalise), nb_samp)
+    y = load_audio(path, target_sr, normalise)
+    if trim:
+        y = trim_silence(y, target_sr)
+    return pad(y, nb_samp)

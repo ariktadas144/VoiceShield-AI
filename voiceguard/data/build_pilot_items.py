@@ -100,7 +100,7 @@ def main() -> int:
         self_pairs = sum(1 for i in g if i["ref_id"] == i["target_text_from"])
         print(f"{language:11s} {len(g):6d} {self_pairs:11d}  "
               f"{statistics.median(len(i['target_text']) for i in g):.0f}")
-    print(f"\nwrote {args.out}  ({len(items)} items, consumed by BOTH generators)")
+    print(f"\nwrote {args.out}  ({len(items)} items)")
     sys.stdout.flush()
     os._exit(0)
 
