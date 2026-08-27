@@ -1,0 +1,252 @@
+{
+  "contrasts": {
+    "FLEURS vs SPRING_F5": {
+      "classifier": {
+        "auc": 0.9794125,
+        "balanced_acc": 0.94125
+      },
+      "auc_by_feature": {
+        "rms_db": 0.76746875,
+        "peak": 0.71674375,
+        "crest_db": 0.40783125,
+        "dyn_range_db": 0.95611875,
+        "noise_floor_db": 0.34569375,
+        "silence_frac": 0.839596875,
+        "hf_share": 0.281125,
+        "lf_share": 0.52925625,
+        "centroid_hz": 0.40021875,
+        "rolloff95_hz": 0.4446375,
+        "flatness": 0.27354375,
+        "zcr": 0.47523125,
+        "duration_s": 0.115446875
+      },
+      "worst": "dyn_range_db"
+    },
+    "v1 bona vs v1 spoof (what v1 learned)": {
+      "classifier": {
+        "auc": 0.7633874999999999,
+        "balanced_acc": 0.70875
+      },
+      "auc_by_feature": {
+        "rms_db": 0.493075,
+        "peak": 0.452003125,
+        "crest_db": 0.41349375,
+        "dyn_range_db": 0.3650875,
+        "noise_floor_db": 0.590775,
+        "silence_frac": 0.409203125,
+        "hf_share": 0.3968,
+        "lf_share": 0.56591875,
+        "centroid_hz": 0.407625,
+        "rolloff95_hz": 0.40265625,
+        "flatness": 0.40715625,
+        "zcr": 0.36575625,
+        "duration_s": 0.47515625
+      },
+      "worst": "dyn_range_db"
+    },
+    "FLEURS vs v1 bonafide (corpus shift alone)": {
+      "classifier": {
+        "auc": 0.9750125000000002,
+        "balanced_acc": 0.94625
+      },
+      "auc_by_feature": {
+        "rms_db": 0.1607375,
+        "peak": 0.19330625,
+        "crest_db": 0.605475,
+        "dyn_range_db": 0.17735,
+        "noise_floor_db": 0.541121875,
+        "silence_frac": 0.24004375,
+        "hf_share": 0.60414375,
+        "lf_share": 0.63958125,
+        "centroid_hz": 0.47764375,
+        "rolloff95_hz": 0.491040625,
+        "flatness": 0.50675,
+        "zcr": 0.48438125,
+        "duration_s": 0.788440625
+      },
+      "worst": "rms_db"
+    },
+    "SPRING_F5 vs v1 spoof (new fake vs old fake)": {
+      "classifier": {
+        "auc": 0.984725,
+        "balanced_acc": 0.94625
+      },
+      "auc_by_feature": {
+        "rms_db": 0.395725,
+        "peak": 0.42095,
+        "crest_db": 0.57409375,
+        "dyn_range_db": 0.88181875,
+        "noise_floor_db": 0.31720625,
+        "silence_frac": 0.602128125,
+        "hf_share": 0.389175,
+        "lf_share": 0.61074375,
+        "centroid_hz": 0.41650625,
+        "rolloff95_hz": 0.5094875,
+        "flatness": 0.24323125,
+        "zcr": 0.56935,
+        "duration_s": 0.346475
+      },
+      "worst": "dyn_range_db"
+    },
+    "FLEURS vs OpenSLR bonafide": {
+      "classifier": {
+        "auc": 0.9944312500000001,
+        "balanced_acc": 0.965
+      },
+      "auc_by_feature": {
+        "rms_db": 0.24965,
+        "peak": 0.3281375,
+        "crest_db": 0.7348,
+        "dyn_range_db": 0.04299375,
+        "noise_floor_db": 0.77626875,
+        "silence_frac": 0.053165625,
+        "hf_share": 0.75338125,
+        "lf_share": 0.33435625,
+        "centroid_hz": 0.698525,
+        "rolloff95_hz": 0.6407125,
+        "flatness": 0.7570875,
+        "zcr": 0.30175,
+        "duration_s": 0.90526875
+      },
+      "worst": "dyn_range_db"
+    },
+    "ext spoof (xtts) vs FLEURS": {
+      "classifier": {
+        "auc": 0.92155625,
+        "balanced_acc": 0.85875
+      },
+      "auc_by_feature": {
+        "rms_db": 0.8824125,
+        "peak": 0.856528125,
+        "crest_db": 0.339475,
+        "dyn_range_db": 0.64831875,
+        "noise_floor_db": 0.709140625,
+        "silence_frac": 0.60835625,
+        "hf_share": 0.29826875,
+        "lf_share": 0.6436125,
+        "centroid_hz": 0.325075,
+        "rolloff95_hz": 0.36731875,
+        "flatness": 0.29655,
+        "zcr": 0.22934375,
+        "duration_s": 0.2982
+      },
+      "worst": "rms_db"
+    }
+  },
+  "n": {
+    "v1_bona_sherry": 400,
+    "v1_bona_openslr": 400,
+    "v1_spoof": 400,
+    "f5_spoof": 400,
+    "fleurs_bona": 400,
+    "ext_spoof_xtts": 400,
+    "ext_spoof_freevc": 400
+  },
+  "medians": {
+    "v1_bona_sherry": {
+      "rms_db": -21.941736143092385,
+      "peak": 0.502471923828125,
+      "crest_db": 17.72759105586543,
+      "dyn_range_db": 55.10537528991699,
+      "noise_floor_db": -70.5866928100586,
+      "silence_frac": 0.17021306224759783,
+      "hf_share": 0.004746745784653804,
+      "lf_share": 0.24530695580922404,
+      "centroid_hz": 592.7230687157629,
+      "rolloff95_hz": 1343.75,
+      "flatness": 0.029481950545149828,
+      "zcr": 0.11019770793339229,
+      "duration_s": 7.1333125
+    },
+    "v1_bona_openslr": {
+      "rms_db": -26.049168881212747,
+      "peak": 0.34130859375,
+      "crest_db": 16.35252285726101,
+      "dyn_range_db": 60.274871826171875,
+      "noise_floor_db": -79.09794616699219,
+      "silence_frac": 0.3702504879635654,
+      "hf_share": 0.0019428654831311096,
+      "lf_share": 0.47035828866685103,
+      "centroid_hz": 425.892942682107,
+      "rolloff95_hz": 1062.5,
+      "flatness": 0.011251306279311622,
+      "zcr": 0.153886124690508,
+      "duration_s": 4.864
+    },
+    "v1_spoof": {
+      "rms_db": -22.846896264268665,
+      "peak": 0.4940643310546875,
+      "crest_db": 17.14834987664743,
+      "dyn_range_db": 48.40602493286133,
+      "noise_floor_db": -59.733572006225586,
+      "silence_frac": 0.11355577047066409,
+      "hf_share": 0.003417353415939129,
+      "lf_share": 0.26779677971975135,
+      "centroid_hz": 555.1247768639153,
+      "rolloff95_hz": 1218.75,
+      "flatness": 0.024665266911932965,
+      "zcr": 0.10255014045854784,
+      "duration_s": 6.838312500000001
+    },
+    "f5_spoof": {
+      "rms_db": -24.249164103492095,
+      "peak": 0.41835127770900726,
+      "crest_db": 17.80318228502467,
+      "dyn_range_db": 67.12915802001953,
+      "noise_floor_db": -72.27517700195312,
+      "silence_frac": 0.16238690219732874,
+      "hf_share": 0.0022509498152522775,
+      "lf_share": 0.3517191661726612,
+      "centroid_hz": 517.8987911295577,
+      "rolloff95_hz": 1312.5,
+      "flatness": 0.01381400313101953,
+      "zcr": 0.10656091343463041,
+      "duration_s": 5.1466875
+    },
+    "fleurs_bona": {
+      "rms_db": -34.21819987527758,
+      "peak": 0.2141876220703125,
+      "crest_db": 18.31915793382112,
+      "dyn_range_db": 31.909154891967773,
+      "noise_floor_db": -62.29501152038574,
+      "silence_frac": 0.02315009761512843,
+      "hf_share": 0.00837618876023432,
+      "lf_share": 0.3277044960256149,
+      "centroid_hz": 570.7376671582455,
+      "rolloff95_hz": 1343.75,
+      "flatness": 0.029511690388283968,
+      "zcr": 0.1074436883304887,
+      "duration_s": 10.56
+    },
+    "ext_spoof_xtts": {
+      "rms_db": -20.060845262729824,
+      "peak": 0.8095550537109375,
+      "crest_db": 17.00554144777921,
+      "dyn_range_db": 36.491050720214844,
+      "noise_floor_db": -49.81855773925781,
+      "silence_frac": 0.04682326621923938,
+      "hf_share": 0.002160853553797105,
+      "lf_share": 0.44352270868913274,
+      "centroid_hz": 450.6217171766609,
+      "rolloff95_hz": 1000.0,
+      "flatness": 0.012646648941085269,
+      "zcr": 0.07507893398563328,
+      "duration_s": 7.52
+    },
+    "ext_spoof_freevc": {
+      "rms_db": -16.725971326879808,
+      "peak": 0.9985198974609375,
+      "crest_db": 16.71485162360186,
+      "dyn_range_db": 34.1245059967041,
+      "noise_floor_db": -41.73276710510254,
+      "silence_frac": 0.023075348075348077,
+      "hf_share": 0.0015202472154337333,
+      "lf_share": 0.3119284306591025,
+      "centroid_hz": 546.5972265169413,
+      "rolloff95_hz": 1218.75,
+      "flatness": 0.014397174039007636,
+      "zcr": 0.06780440707457279,
+      "duration_s": 6.48
+    }
+  }
+}

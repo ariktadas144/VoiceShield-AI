@@ -202,6 +202,9 @@ def main() -> int:
     parser.add_argument("--no-normalise", dest="normalise", action="store_false",
                         default=True, help="skip peak normalisation (reproduces the "
                                            "inflated loudness-shortcut baseline)")
+    parser.add_argument("--trim", action="store_true",
+                        help="symmetric leading/trailing silence trimming, applied to "
+                             "BOTH classes in the shared front end")
     args = parser.parse_args()
 
     manifests = Path(args.data_path or args.manifests)
