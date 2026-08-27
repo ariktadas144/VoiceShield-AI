@@ -1,0 +1,22 @@
+{
+  "repo": "ai4bharat/IndicVoices",
+  "revision": "c96f9088f138cf89d419da7e8e643e1f05c00a87",
+  "license": "cc-by-4.0",
+  "gated": "auto",
+  "split": "valid",
+  "languages": [
+    "hindi",
+    "tamil",
+    "telugu",
+    "malayalam"
+  ],
+  "files": [
+    "hindi/valid-00000-of-00001.parquet",
+    "malayalam/valid-00000-of-00002.parquet",
+    "malayalam/valid-00001-of-00002.parquet",
+    "tamil/valid-00000-of-00002.parquet",
+    "tamil/valid-00001-of-00002.parquet",
+    "telugu/valid-00000-of-00001.parquet"
+  ],
+  "bytes": 1755688349
+}

@@ -22,3 +22,5 @@ generators/*/*.onnx
 data/f5_train/audio/
 data/f5_long/audio/
 data/mixed_f5/*.txt
+data/indicvoices_raw/
+data/indicvoices/audio/

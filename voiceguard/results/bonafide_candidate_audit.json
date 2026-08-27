@@ -1,0 +1,138 @@
+{
+  "separability": {
+    "sherry_bona|openslr_bona": 0.98020625,
+    "sherry_bona|indicvoices": 0.87495,
+    "sherry_bona|fleurs_bona": 0.9767124999999999,
+    "openslr_bona|sherry_bona": 0.98145,
+    "openslr_bona|indicvoices": 0.95470625,
+    "openslr_bona|fleurs_bona": 0.99503125,
+    "indicvoices|sherry_bona": 0.8776687499999999,
+    "indicvoices|openslr_bona": 0.95690625,
+    "indicvoices|fleurs_bona": 0.8836187500000001,
+    "fleurs_bona|sherry_bona": 0.9750125000000002,
+    "fleurs_bona|openslr_bona": 0.9944312500000001,
+    "fleurs_bona|indicvoices": 0.8830687500000001
+  },
+  "shortcut_risk": {
+    "IndicVoices vs ALL FAKE": {
+      "auc": 0.8272281250000002,
+      "worst": "dyn_range_db",
+      "worst_auc": 0.2593125
+    },
+    "Sherry bona  vs ALL FAKE": {
+      "auc": 0.7724625,
+      "worst": "flatness",
+      "worst_auc": 0.707253125
+    },
+    "OpenSLR bona vs ALL FAKE": {
+      "auc": 0.9654375,
+      "worst": "silence_frac",
+      "worst_auc": 0.8480703125
+    },
+    "IndicVoices vs SPRING_F5": {
+      "auc": 0.9122875,
+      "worst": "dyn_range_db",
+      "worst_auc": 0.12744375
+    }
+  },
+  "n": {
+    "sherry_bona": 400,
+    "openslr_bona": 400,
+    "indicvoices": 400,
+    "fleurs_bona": 400,
+    "sherry_spoof": 400,
+    "spring_f5": 400
+  },
+  "medians": {
+    "sherry_bona": {
+      "rms_db": -21.941736143092385,
+      "peak": 0.502471923828125,
+      "crest_db": 17.72759105586543,
+      "dyn_range_db": 55.10537528991699,
+      "noise_floor_db": -70.5866928100586,
+      "silence_frac": 0.17021306224759783,
+      "hf_share": 0.004746745784653804,
+      "lf_share": 0.24530695580922404,
+      "centroid_hz": 592.7230687157629,
+      "rolloff95_hz": 1343.75,
+      "flatness": 0.029481950545149828,
+      "zcr": 0.11019770793339229,
+      "duration_s": 7.1333125
+    },
+    "openslr_bona": {
+      "rms_db": -26.049168881212747,
+      "peak": 0.34130859375,
+      "crest_db": 16.35252285726101,
+      "dyn_range_db": 60.274871826171875,
+      "noise_floor_db": -79.09794616699219,
+      "silence_frac": 0.3702504879635654,
+      "hf_share": 0.0019428654831311096,
+      "lf_share": 0.47035828866685103,
+      "centroid_hz": 425.892942682107,
+      "rolloff95_hz": 1062.5,
+      "flatness": 0.011251306279311622,
+      "zcr": 0.153886124690508,
+      "duration_s": 4.864
+    },
+    "indicvoices": {
+      "rms_db": -22.459401080980733,
+      "peak": 0.5428466796875,
+      "crest_db": 16.46726876745948,
+      "dyn_range_db": 36.6385440826416,
+      "noise_floor_db": -50.00876808166504,
+      "silence_frac": 0.04670010449320794,
+      "hf_share": 0.0009753142659809629,
+      "lf_share": 0.2960725977662165,
+      "centroid_hz": 524.593096137997,
+      "rolloff95_hz": 1125.0,
+      "flatness": 0.007934777951768432,
+      "zcr": 0.09022229057599893,
+      "duration_s": 5.5745000000000005
+    },
+    "fleurs_bona": {
+      "rms_db": -34.21819987527758,
+      "peak": 0.2141876220703125,
+      "crest_db": 18.31915793382112,
+      "dyn_range_db": 31.909154891967773,
+      "noise_floor_db": -62.29501152038574,
+      "silence_frac": 0.02315009761512843,
+      "hf_share": 0.00837618876023432,
+      "lf_share": 0.3277044960256149,
+      "centroid_hz": 570.7376671582455,
+      "rolloff95_hz": 1343.75,
+      "flatness": 0.029511690388283968,
+      "zcr": 0.1074436883304887,
+      "duration_s": 10.56
+    },
+    "sherry_spoof": {
+      "rms_db": -22.846896264268665,
+      "peak": 0.4940643310546875,
+      "crest_db": 17.14834987664743,
+      "dyn_range_db": 48.40602493286133,
+      "noise_floor_db": -59.733572006225586,
+      "silence_frac": 0.11355577047066409,
+      "hf_share": 0.003417353415939129,
+      "lf_share": 0.26779677971975135,
+      "centroid_hz": 555.1247768639153,
+      "rolloff95_hz": 1218.75,
+      "flatness": 0.024665266911932965,
+      "zcr": 0.10255014045854784,
+      "duration_s": 6.838312500000001
+    },
+    "spring_f5": {
+      "rms_db": -24.249164103492095,
+      "peak": 0.41835127770900726,
+      "crest_db": 17.80318228502467,
+      "dyn_range_db": 67.12915802001953,
+      "noise_floor_db": -72.27517700195312,
+      "silence_frac": 0.16238690219732874,
+      "hf_share": 0.0022509498152522775,
+      "lf_share": 0.3517191661726612,
+      "centroid_hz": 517.8987911295577,
+      "rolloff95_hz": 1312.5,
+      "flatness": 0.01381400313101953,
+      "zcr": 0.10656091343463041,
+      "duration_s": 5.1466875
+    }
+  }
+}
