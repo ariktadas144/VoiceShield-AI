@@ -197,3 +197,75 @@ f5-trimmed remains the best unseen-spoof result.
 Worth recording: ASDG produced the **best C (8.12%), best D (AUC 0.618) and best FLEURS
 (14.0%)** of any model built. If the objective were bonafide robustness alone it would win.
 It is rejected because it bought that with unseen-spoof detection, again.
+
+---
+
+# Follow-up: was it sampling exposure rather than the objective?
+
+Investigated without training the detector.
+
+## What the discriminator actually saw
+
+Replaying the exact loader (batch 32, shuffle, drop_last) over the full 30-epoch budget,
+6,480 steps:
+
+| domain | per batch | batches with 0 | with ≤1 |
+|---|---|---|---|
+| SherryT997 | 10.1 | 0.0% | 0.0% |
+| OpenSLR | 4.1 | 1.5% | 7.2% |
+| **IndicVoices** | **1.9** | **13.2%** | **42.0%** |
+
+All three domains were present in 85.5% of batches and a cross-domain triplet was formable
+in 99.8%, so the *separation* half had ample signal. The *aggregation* half did not.
+
+## The decisive test
+
+The same 3-way linear head, on frozen iv15 embeddings, identical steps and learning rate,
+differing only in batch composition:
+
+| batch composition | test acc | Sherry | OpenSLR | IndicVoices |
+|---|---|---|---|---|
+| imbalanced 10/4/2 — as ASDG saw it | 46.3% | 82.1% | 26.1% | **25.0%** |
+| domain-balanced 5/5/6 | 50.0% | 36.8% | 53.9% | **62.5%** |
+
+Under the real batch mix the discriminator degenerates into a **Sherry detector**: the two
+minority domains sit at chance. Under balanced batches all three become learnable, and
+IndicVoices — the domain added specifically to fix FLEURS — becomes the *best* recovered.
+
+**The information was in the embedding all along. The sampling regime prevented the
+discriminator from learning it.** A gradient reversal layer can only reverse a gradient
+that exists; for IndicVoices there was effectively none to reverse. That is a sampling
+failure, not a refutation of single-side domain adversarial learning.
+
+## Does under-exposure also affect the main task?
+
+Plausible but **not demonstrated**. Two mechanisms:
+
+| source | share | per batch now | balanced | change |
+|---|---|---|---|---|
+| SherryT997 | 62.5% | 10.1 | 5.4 | 0.53× |
+| OpenSLR | 25.5% | 4.1 | 5.4 | 1.31× |
+| IndicVoices | 12.0% | 1.9 | 5.4 | **2.78×** |
+| sherry_spoof | 60.3% | 9.6 | 7.9 | 0.83× |
+| spring_f5 | 39.7% | 6.3 | 7.9 | 1.26× |
+
+1. Gradient composition per step is dominated by SherryT997.
+2. RawNet2 carries four BatchNorm declarations, so batch composition sets the
+   normalisation statistics the whole network sees — an under-exposed source contributes
+   less to them regardless of its total count.
+
+This reframes the dose-response result. The 15% and 30% experiments varied how many
+IndicVoices clips exist; **neither varied how many the model sees per step**, which stayed
+proportional. Source-balanced batching is a different axis from dose and has not been
+tested.
+
+## Status
+
+This is a diagnosis, not a result. It identifies a concrete, cheap, established
+intervention — balanced batch sampling, which the multi-corpus literature already
+recommends "to stabilise training and improve generalisation" — that changes **no data**:
+same clips, same counts per epoch, only the per-step mix.
+
+It does not show that fixing exposure would recover B. The honest position is that ASDG
+was never given a fair test of its central mechanism, and that the trade-off conclusion
+drawn from five experiments rests on runs that all shared one untested sampling regime.
