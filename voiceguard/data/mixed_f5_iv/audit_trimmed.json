@@ -1,0 +1,99 @@
+{
+  "split": "train",
+  "trimmed": true,
+  "contrasts": [
+    {
+      "name": "REAL vs ALL FAKE",
+      "n_pos": 1400,
+      "n_neg": 700,
+      "auc": {
+        "rms_db": 0.4414173469387755,
+        "peak": 0.4604494897959184,
+        "crest_db": 0.5502530612244898,
+        "hf_share": 0.4611183673469388,
+        "noise_floor_db": 0.46622551020408165,
+        "silence_frac": 0.533159693877551,
+        "zcr": 0.4246683673469388,
+        "centroid_hz": 0.4853469387755102,
+        "duration_s": 0.48370255102040816
+      },
+      "worst_feature": "zcr",
+      "worst_auc": 0.4246683673469388,
+      "classifier": {
+        "auc": 0.6505153061224491,
+        "balanced_acc": 0.6071428571428572
+      },
+      "verdict": "not trivially separable"
+    },
+    {
+      "name": "REAL vs SPRING_F5 only",
+      "n_pos": 700,
+      "n_neg": 700,
+      "auc": {
+        "rms_db": 0.39753061224489794,
+        "peak": 0.42804285714285717,
+        "crest_db": 0.5604102040816327,
+        "hf_share": 0.41652653061224487,
+        "noise_floor_db": 0.47903469387755104,
+        "silence_frac": 0.5376928571428572,
+        "zcr": 0.37078979591836736,
+        "centroid_hz": 0.4457081632653061,
+        "duration_s": 0.40512040816326533
+      },
+      "worst_feature": "zcr",
+      "worst_auc": 0.37078979591836736,
+      "classifier": {
+        "auc": 0.7519428571428571,
+        "balanced_acc": 0.6942857142857143
+      },
+      "verdict": "partly separable"
+    },
+    {
+      "name": "REAL vs Sherry spoof only",
+      "n_pos": 700,
+      "n_neg": 700,
+      "auc": {
+        "rms_db": 0.48530408163265304,
+        "peak": 0.4928561224489796,
+        "crest_db": 0.5400959183673469,
+        "hf_share": 0.5057102040816327,
+        "noise_floor_db": 0.45341632653061226,
+        "silence_frac": 0.5286265306122448,
+        "zcr": 0.4785469387755102,
+        "centroid_hz": 0.5249857142857143,
+        "duration_s": 0.562284693877551
+      },
+      "worst_feature": "duration_s",
+      "worst_auc": 0.562284693877551,
+      "classifier": {
+        "auc": 0.6059061224489796,
+        "balanced_acc": 0.5707142857142857
+      },
+      "verdict": "not trivially separable"
+    },
+    {
+      "name": "SPRING_F5 vs Sherry spoof",
+      "n_pos": 700,
+      "n_neg": 700,
+      "auc": {
+        "rms_db": 0.4204551020408163,
+        "peak": 0.4319061224489796,
+        "crest_db": 0.5266551020408163,
+        "hf_share": 0.38473673469387754,
+        "noise_floor_db": 0.5405142857142857,
+        "silence_frac": 0.49111836734693876,
+        "zcr": 0.3800938775510204,
+        "centroid_hz": 0.4139244897959184,
+        "duration_s": 0.31772755102040817
+      },
+      "worst_feature": "duration_s",
+      "worst_auc": 0.31772755102040817,
+      "classifier": {
+        "auc": 0.7533795918367345,
+        "balanced_acc": 0.7064285714285714
+      },
+      "verdict": "partly separable"
+    }
+  ],
+  "gate_pass": true
+}
