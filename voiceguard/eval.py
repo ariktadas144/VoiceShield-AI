@@ -38,7 +38,7 @@ import torch
 import yaml
 from torch.nn import functional as F
 
-from audio_utils import load_audio, pad
+from audio_utils import load_audio, pad, trim_silence
 from model import RawNet
 
 LIBRISEVOC_CLASSES = ["gt", "wavegrad", "diffwave", "parallel wave gan",
@@ -94,6 +94,10 @@ def main() -> int:
                         help="overrides the dev-fitted threshold in the checkpoint")
     parser.add_argument("--lang", default=None, help="recorded in the output, not inferred")
     parser.add_argument("--no-normalise", dest="normalise", action="store_false", default=True)
+    parser.add_argument("--trim", dest="trim", action="store_true", default=None,
+                        help="force silence trimming (default: whatever the checkpoint says)")
+    parser.add_argument("--no-trim", dest="trim", action="store_false",
+                        help="force trimming off (default: whatever the checkpoint says)")
     parser.add_argument("--json", action="store_true", help="emit machine-readable output")
     args = parser.parse_args()
 
@@ -112,7 +116,14 @@ def main() -> int:
     sample_rate = args.sample_rate or cfg.get("sample_rate", 24_000)
     window = cfg["nb_samp"]
 
+    # The audio contract is read FROM the checkpoint, never assumed. A model trained on
+    # trimmed audio and scored on untrimmed audio is being asked a different question than
+    # it was taught: measured on the iv15 checkpoint, ignoring this costs 11.5 points of
+    # SPRING_F5 detection (88.5% -> 77.1%). --trim / --no-trim override it only if asked.
+    trim = meta.get("trim", False) if args.trim is None else args.trim
     y = load_audio(audio_path, sample_rate, normalise=args.normalise)
+    if trim:
+        y = trim_silence(y, sample_rate)
     duration = len(y) / sample_rate
     if duration > MAX_DURATION_S:
         print(f"error: {duration:.1f}s exceeds the {MAX_DURATION_S}s cap", file=sys.stderr)
@@ -154,6 +165,7 @@ def main() -> int:
         "audio_seconds": round(duration, 2),
         "sample_rate": sample_rate,
         "normalised": args.normalise,
+        "trimmed": trim,
         "model": str(args.model_path),
         "dev_eer_at_selection": meta.get("dev_eer"),
     }
@@ -165,6 +177,7 @@ def main() -> int:
     print(f"file              : {audio_path.name}")
     print(f"language          : {args.lang or 'not supplied'}")
     print(f"windows scored    : {len(windows)}  ({duration:.2f}s @ {sample_rate} Hz)")
+    print(f"audio contract    : normalise={args.normalise}  trim={trim} (from checkpoint)")
     print(f"P(spoof)          : {spoof_probability:.6f}")
     if threshold is None:
         print("threshold         : none in checkpoint -- score reported without a verdict")
