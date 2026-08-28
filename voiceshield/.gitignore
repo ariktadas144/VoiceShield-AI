@@ -49,3 +49,7 @@ _tmp_*.txt
 !checkpoints_f5_iv15/best_model.pth
 !checkpoints_asdg_bal/best_model.pth
 !frozen/*.pth
+
+# SSL research: downloaded checkpoints (1.2 GB) -- pinned in
+# models/spectra_aasist/DOWNLOAD_RECORD.json with sha256
+models/
