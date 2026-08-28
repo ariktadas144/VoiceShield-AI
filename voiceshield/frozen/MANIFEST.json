@@ -1,0 +1,131 @@
+{
+  "name": "VoiceShield-Indic",
+  "version": "0",
+  "frozen_on": "2026-08-26",
+  "selection_rule": "lowest dev EER; test never used for selection or thresholding",
+  "selection_basis": {
+    "normalised_dev_eer": 0.0141,
+    "unnormalised_dev_eer": 0.0195,
+    "chosen": "normalised",
+    "why": "normalised wins the dev criterion, wins pooled and macro on test, and its advantage comes from the languages with no loudness artefact (Hindi, English). The un-normalised model leads only on Tamil and Malayalam, exactly the two languages whose raw peak amplitude separates the classes (AUC 0.059 / 0.312) - shortcut exploitation, not a generalisation gain."
+  },
+  "checkpoint": {
+    "path": "frozen/voiceshield-indic-v0.1.pth",
+    "sha256": "e9937affd88c0232c323240b839c2ff27ac65e3598fa5af49393a435ae1a6b9b",
+    "epoch": 29,
+    "dev_eer": 0.014133595698565583,
+    "threshold": 0.8061832189559937,
+    "seed": 1234,
+    "spoof_index": 1,
+    "align_head": true
+  },
+  "architecture": {
+    "model": "RawNet2 (VoiceShield fork, unmodified)",
+    "params": 18680446,
+    "init": "official ASVspoof 2021 RawNet2, 119/123 tensors, 94.3% of params",
+    "pretrained_sha256": "52d8ad5f524a0f600c7c876d7a157a8f06c44a03504d0b2795c852f5e42c9127"
+  },
+  "preprocessing_contract": {
+    "sample_rate": 16000,
+    "nb_samp": 64600,
+    "window_seconds": 4.037,
+    "short_clip_policy": "tile (never zero-pad)",
+    "normalisation": "per-utterance peak to 0.95, applied at load in audio_utils",
+    "applies_to": "training AND inference, identically"
+  },
+  "config": {
+    "path": "model_config_RawNet.yaml",
+    "sha256": "d04422262d9d784e239bc11efd60842b7a3f6f0be8f4f2ea0189fc4d0bdec18d"
+  },
+  "training_data": {
+    "dataset": "SherryT997/IndicTTS-Deepfake-Challenge-Data",
+    "revision": "57347517658ae989597d8cef303cffb647ed2434",
+    "license": "CC-BY-4.0",
+    "manifest_sha256": "b42fa068aa43eead71412f5feafd0deb4fae08c091eacf501c310fff2a7ffa5c",
+    "split_seed": 0,
+    "languages": [
+      "Hindi",
+      "English",
+      "Tamil",
+      "Telugu",
+      "Malayalam"
+    ],
+    "train": 6937,
+    "dev": 1485,
+    "test": 1490
+  },
+  "internal_test_results": {
+    "pooled_eer": 0.017449695869007464,
+    "pooled_auc": 0.9976325348093056,
+    "macro_eer": 0.017631936560410677,
+    "per_language": {
+      "Hindi": {
+        "eer": 0.0,
+        "auc": 1.0
+      },
+      "English": {
+        "eer": 0.03647355833111879,
+        "auc": 0.9884400744087164
+      },
+      "Tamil": {
+        "eer": 0.038218111002921135,
+        "auc": 0.989143135345667
+      },
+      "Telugu": {
+        "eer": 0.0,
+        "auc": 1.0
+      },
+      "Malayalam": {
+        "eer": 0.01346801346801347,
+        "auc": 0.999685746352413
+      }
+    }
+  },
+  "source_commit": "6fd1b44ca567e534eec605694852894f85fb21b4",
+  "dependency_lock": {
+    "path": "requirements.lock.txt",
+    "sha256": "30673c2964ea5eb0ca8824a4fd4a0be371a190d80c1b0fa7ca4fabb3a11aed59"
+  },
+  "frozen_guarantee": "No further training, threshold tuning, hyperparameter change or preprocessing change. External evaluation is zero-shot against this checkpoint and this threshold.",
+  "source_repo": "VoiceShield-AI, branch feat/voiceshield-indic-adaptation",
+  "upstream_commit": "88c0f44c44d4bfde0bd71343397f46ef98b42735 (Mrkomiljon/voiceshield)",
+  "preprocessing_hash": "b8f8145129b62f50fe9422a851c810bd859125a2c278045419fef10f7ac19a6a",
+  "external_test": {
+    "bonafide": "google/fleurs validation (CC-BY-4.0)",
+    "spoof": "vdivyasharma/IndicSynth (CC-BY-NC-4.0, evaluation only)",
+    "manifest_sha256": "306b8674d0de8e5b4f801cffe86c85da89f2b3b03a939219fee3b07ab1bb09ba",
+    "n": 1800,
+    "languages": [
+      "Hindi",
+      "Tamil",
+      "Telugu",
+      "Malayalam",
+      "English(bonafide only)"
+    ]
+  },
+  "external_results": {
+    "pooled_eer": 0.4989,
+    "pooled_auc": 0.491,
+    "isolation_2x2": {
+      "internal_bona_x_internal_spoof": {
+        "eer": 0.0118,
+        "auc": 0.999
+      },
+      "internal_bona_x_external_spoof": {
+        "eer": 0.0888,
+        "auc": 0.956
+      },
+      "external_bona_x_internal_spoof": {
+        "eer": 0.1752,
+        "auc": 0.89
+      },
+      "external_bona_x_external_spoof": {
+        "eer": 0.5262,
+        "auc": 0.453
+      }
+    },
+    "diagnosis": "bonafide-domain overfitting: spoof cues transfer to unseen generators (AUC 0.956) but 76% of genuine speech from an unseen recording domain is flagged synthetic"
+  },
+  "immutable": "VoiceShield-Indic-v0. Do not modify. All later experiments are compared against this checkpoint and this commit.",
+  "source_commit_note": "The commit holding the code this checkpoint was produced by. This manifest is committed immediately after it, since a file cannot contain the hash of the commit that introduces it."
+}

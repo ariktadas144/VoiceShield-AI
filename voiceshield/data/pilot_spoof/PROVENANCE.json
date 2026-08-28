@@ -1,0 +1,300 @@
+{
+  "generated_by": "/home/aayushdwivedi/Projects/non-indie-voiceshield/voiceshield/data/gen/record_provenance.py",
+  "models": {
+    "SPRINGLab/SPRING_F5": {
+      "revision": "898dd2a56fbb42c994b545fadfdd831eeadfafb0",
+      "local": "generators/spring_f5",
+      "files": 300,
+      "bytes": 5403470085,
+      "license": "apache-2.0",
+      "gated": "False"
+    },
+    "SPRINGLab/Indic-Mio": {
+      "revision": "25feace00ca76c71c40b1e8d921fd3c2943c545e",
+      "local": "generators/indic_mio",
+      "files": 33,
+      "bytes": 1238685722,
+      "license": "apache-2.0",
+      "gated": "False"
+    },
+    "Aratako/MioCodec-25Hz-24kHz": {
+      "revision": "3a737f0de2c6324cb2fe40c1fbd1056c7add423d",
+      "local": "generators/miocodec",
+      "files": 15,
+      "bytes": 523100680,
+      "license": "mit",
+      "gated": "False"
+    }
+  },
+  "spring_f5_ema_extraction": {
+    "derived_from": "generators/spring_f5/checkpoints/model_170000.pt",
+    "source_sha256": "6824673c8b5e570b2f5ef231e19be2f9e756cfccddee63650ed96f77510092ba",
+    "source_bytes": 5401308398,
+    "output": "generators/spring_f5/checkpoints/model_170000_ema.safetensors",
+    "output_sha256": "c7f98ec880781e93cfb2ad55043008802bb9246065fe791444c512d2fbb33668",
+    "output_bytes": 1350213425,
+    "extracted_key": "ema_model_state_dict",
+    "n_tensors": 366,
+    "skipped_non_tensor": [],
+    "reason": "full checkpoint is 5.4 GB and load_checkpoint maps it onto a 3.64 GiB GPU",
+    "tensors_modified": false
+  },
+  "file_hashes": {
+    "spring_f5/config.json": {
+      "sha256": "7a951c227ae581777804afb567c9e14b38671b3d76c5dd70d5b3c793e191055d",
+      "bytes": 366
+    },
+    "spring_f5/checkpoints/vocab.txt": {
+      "sha256": "880361520170a77a0936f7e3fd81a38dc1a6faf139d6daede781d67d63cc5a0d",
+      "bytes": 14649
+    },
+    "spring_f5/checkpoints/model_170000_ema.safetensors": {
+      "sha256": "c7f98ec880781e93cfb2ad55043008802bb9246065fe791444c512d2fbb33668",
+      "bytes": 1350213425
+    },
+    "indic_mio/config.json": {
+      "sha256": "c82ec19beeaf78500faa6bf7ff0a9dec43636ecd5216ae7a328df621ea38cfee",
+      "bytes": 1394
+    },
+    "indic_mio/generation_config.json": {
+      "sha256": "5a9b6a7841fafad4a3377a401235479153b04f29caba162c1f3ec5e224cbe16d",
+      "bytes": 183
+    },
+    "indic_mio/chat_template.jinja": {
+      "sha256": "4d8364de810c76f3b4ab34127c1484ae44ab0b183298f7e33ecddf4404ad61f7",
+      "bytes": 205
+    },
+    "miocodec/config.yaml": {
+      "sha256": "24a8567efe57b0b6f7a10930a1850738c54d98455d307496a368ca853ffb38c8",
+      "bytes": 2404
+    },
+    "data/pilot_refs/references.jsonl": {
+      "sha256": "d6733a3586eb6a0e30935f23ae0fb26233a55cf40bf180e8bf1c4a61b0709390",
+      "bytes": 232570
+    },
+    "data/pilot_refs/pilot_items.jsonl": {
+      "sha256": "6ffc8303123554fb9add2e5aa5cc38cdb7450703db4654036b42c4d3d6bffe21",
+      "bytes": 256058
+    }
+  },
+  "environment": {
+    "python": "3.11.16",
+    "platform": "Linux-7.1.8-1-cachyos-x86_64-with-glibc2.44",
+    "torch": "2.13.0+cu130",
+    "cuda_available": true,
+    "gpu": "NVIDIA GeForce GTX 1650",
+    "gpu_total_MiB": 3723,
+    "transformers": "5.15.1",
+    "torchaudio": "2.11.0+cu130",
+    "miocodec": null,
+    "soundfile": "0.14.0",
+    "numpy": "1.26.4",
+    "pip_freeze": [
+      "accelerate==1.14.0",
+      "aiohappyeyeballs==2.7.1",
+      "aiohttp==3.14.3",
+      "aiosignal==1.4.0",
+      "annotated-doc==0.0.5",
+      "annotated-types==0.8.0",
+      "antlr4-python3-runtime==4.9.3",
+      "anyio==4.14.2",
+      "attrs==26.1.0",
+      "audioread==3.1.0",
+      "boto3==1.43.80",
+      "botocore==1.43.80",
+      "cached_path==1.8.10",
+      "certifi==2026.7.22",
+      "cffi==2.1.1",
+      "charset-normalizer==3.5.1",
+      "click==8.4.2",
+      "contourpy==1.3.3",
+      "cryptography==50.0.1",
+      "cuda-bindings==13.3.1",
+      "cuda-pathfinder==1.7.0",
+      "cuda-toolkit==13.0.3.0",
+      "cycler==0.12.1",
+      "datasets==5.0.1",
+      "decorator==5.3.1",
+      "dill==0.4.1",
+      "docstring_parser==0.18.0",
+      "einops==0.8.2",
+      "einx==0.4.3",
+      "ema-pytorch==0.8.3",
+      "encodec==0.1.1",
+      "f5_tts @ git+https://github.com/ArigalaAdarsh/SPRING_F5.git@c5efea95143503e8571b739a95972c65740e7946",
+      "filelock==3.32.4",
+      "fonttools==4.63.0",
+      "frozendict==2.4.7",
+      "frozenlist==1.8.0",
+      "fsspec==2026.6.0",
+      "google-api-core==2.34.0",
+      "google-auth==2.57.0",
+      "google-cloud-core==2.7.0",
+      "google-cloud-storage==3.13.1",
+      "google-crc32c==1.8.0",
+      "google-resumable-media==2.10.2",
+      "googleapis-common-protos==1.75.2",
+      "h11==0.16.0",
+      "hf-xet==1.6.0",
+      "httpcore==1.0.9",
+      "httpx==0.28.1",
+      "huggingface_hub==1.28.0",
+      "hydra-core==1.3.5",
+      "idna==3.19",
+      "indic_numtowords==1.1.0",
+      "jieba==0.42.1",
+      "Jinja2==3.1.6",
+      "jmespath==1.1.0",
+      "joblib==1.5.3",
+      "json5==0.15.0",
+      "jsonargparse==4.51.0",
+      "julius==0.2.8",
+      "kiwisolver==1.5.0",
+      "lazy-loader==0.5",
+      "librosa==0.11.0",
+      "llvmlite==0.49.0",
+      "loguru==0.7.3",
+      "markdown-it-py==4.2.0",
+      "MarkupSafe==3.0.3",
+      "matplotlib==3.11.1",
+      "mdurl==0.1.2",
+      "miocodec @ git+https://github.com/Aratako/MioCodec@77473544375d57e96cbdfd5d7d257e8f280fa8e3",
+      "mpmath==1.3.0",
+      "msgpack==1.2.1",
+      "multidict==6.7.1",
+      "multiprocess==0.70.19",
+      "narwhals==2.25.0",
+      "networkx==3.6.1",
+      "numba==0.67.0",
+      "numpy==1.26.4",
+      "nvidia-cublas==13.1.1.3",
+      "nvidia-cuda-cupti==13.0.85",
+      "nvidia-cuda-nvrtc==13.0.88",
+      "nvidia-cuda-runtime==13.0.96",
+      "nvidia-cudnn-cu13==9.20.0.48",
+      "nvidia-cufft==12.0.0.61",
+      "nvidia-cufile==1.15.1.6",
+      "nvidia-curand==10.4.0.35",
+      "nvidia-cusolver==12.0.4.66",
+      "nvidia-cusparse==12.6.3.3",
+      "nvidia-cusparselt-cu13==0.8.1",
+      "nvidia-nccl-cu13==2.29.7",
+      "nvidia-nvjitlink==13.3.33",
+      "nvidia-nvshmem-cu13==3.4.5",
+      "nvidia-nvtx==13.0.85",
+      "omegaconf==2.3.1",
+      "opentelemetry-api==1.44.0",
+      "packaging==26.3",
+      "pandas==3.0.5",
+      "pillow==12.3.0",
+      "platformdirs==4.11.4",
+      "pooch==1.9.0",
+      "propcache==0.5.2",
+      "proto-plus==1.28.4",
+      "protobuf==7.36.0",
+      "psutil==7.2.2",
+      "pyarrow==25.0.1",
+      "pyasn1==0.6.4",
+      "pyasn1_modules==0.4.2",
+      "pycparser==3.0",
+      "pydantic==2.13.4",
+      "pydantic_core==2.46.4",
+      "pydub==0.25.1",
+      "Pygments==2.21.0",
+      "pyparsing==3.3.2",
+      "pypinyin==0.55.0",
+      "python-dateutil==2.9.0.post0",
+      "PyYAML==6.0.3",
+      "regex==2026.7.19",
+      "requests==2.34.2",
+      "rich==13.9.4",
+      "rjieba==0.2.1",
+      "ruamel.yaml==0.19.1",
+      "s3transfer==0.19.2",
+      "safetensors==0.8.0",
+      "scikit-learn==1.9.0",
+      "scipy==1.17.1",
+      "sentry-sdk==2.68.1",
+      "shellingham==1.5.4",
+      "six==1.17.0",
+      "soundfile==0.14.0",
+      "soxr==1.1.0",
+      "sympy==1.14.0",
+      "threadpoolctl==3.6.0",
+      "tokenizers==0.22.2",
+      "tomli==2.4.1",
+      "torch==2.13.0",
+      "torch-einops-utils==0.1.21",
+      "torchaudio==2.11.0",
+      "torchcodec==0.16.0",
+      "torchdiffeq==0.2.5",
+      "tqdm==4.70.0",
+      "transformers==5.15.1",
+      "transformers-stream-generator==0.0.5",
+      "triton==3.7.1",
+      "typer==0.27.1",
+      "typeshed_client==2.13.0",
+      "typing-inspection==0.4.4",
+      "typing_extensions==4.16.0",
+      "urllib3==2.7.0",
+      "vocos==0.1.0",
+      "wandb==0.28.2",
+      "x-transformers==2.27.4",
+      "xxhash==4.0.1",
+      "yarl==1.24.5"
+    ]
+  },
+  "generation": {
+    "spring_f5": {
+      "n_clips": 400,
+      "distinct_seeds": 400,
+      "settings": {
+        "temperature": [],
+        "top_p": [],
+        "dtype": [],
+        "sample_rate": [
+          24000
+        ]
+      },
+      "languages": {
+        "Hindi": 100,
+        "Malayalam": 100,
+        "Tamil": 100,
+        "Telugu": 100
+      }
+    },
+    "indic_mio": {
+      "n_clips": 400,
+      "distinct_seeds": 400,
+      "settings": {
+        "temperature": [
+          0.9
+        ],
+        "top_p": [
+          0.9
+        ],
+        "dtype": [
+          "float16"
+        ],
+        "sample_rate": [
+          24000
+        ]
+      },
+      "languages": {
+        "Hindi": 100,
+        "Malayalam": 100,
+        "Tamil": 100,
+        "Telugu": 100
+      }
+    },
+    "shared": {
+      "items_file": "data/pilot_refs/pilot_items.jsonl",
+      "references_file": "data/pilot_refs/references.jsonl",
+      "reference_seed": 1234,
+      "item_pairing_seed": 1234,
+      "generation_base_seed": 1234,
+      "per_clip_seed": "sha256(f'{base}:{item_id}')[:4] as big-endian uint32",
+      "identical_inputs_for_both_generators": true
+    }
+  }
+}

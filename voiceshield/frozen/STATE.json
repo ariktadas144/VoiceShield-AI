@@ -1,0 +1,74 @@
+{
+  "branch": "feat/voiceshield-indic-adaptation",
+  "commit": "5b9af863287d2fd8e8ab75349f442a346f5bfb8d",
+  "parent": "713a03a (v0 manifest)  <- 6fd1b44 (adaptation)",
+  "repo": "/home/aayushdwivedi/Projects/VoiceShield-AI",
+  "checkpoints": {
+    "v0_FROZEN_IMMUTABLE": {
+      "sha256": "e9937affd88c0232c323240b839c2ff27ac65e3598fa5af49393a435ae1a6b9b",
+      "epoch": 29,
+      "dev_eer": 0.014133595698565583,
+      "threshold": 0.8061832189559937,
+      "seed": 1234,
+      "rawboost": 0,
+      "init": "pretrained"
+    },
+    "v1_BEST": {
+      "sha256": "8e034e6a28688473b3f97a27c9ab96189f59164d106084a0faf7cb124d941330",
+      "epoch": 28,
+      "dev_eer": 0.022220568320850412,
+      "threshold": 0.17687445878982544,
+      "seed": 1234,
+      "rawboost": 0,
+      "init": "pretrained"
+    },
+    "v2_rejected": {
+      "sha256": "c7a79016ac8168235dcb8c6cff873581594d635ecd8ef857954be1dbe0789734",
+      "epoch": 23,
+      "dev_eer": 0.026264054631992825,
+      "threshold": 0.3581113815307617,
+      "seed": 1234,
+      "rawboost": 0,
+      "init": "pretrained"
+    },
+    "v3_rejected": {
+      "sha256": "21ce7a52999371d942bd676569000a285656957b4bbf45755debb25003753ae1",
+      "epoch": 19,
+      "dev_eer": 0.016829253239327192,
+      "threshold": 0.49003878235816956,
+      "seed": 1234,
+      "rawboost": 0,
+      "init": "checkpoint"
+    },
+    "rawboost_a4_rejected": {
+      "sha256": "14a78664e33054b642e76e5928072ba963a274d03b90e602de2ea422bda9e16e",
+      "epoch": 26,
+      "dev_eer": 0.07744433512559767,
+      "threshold": 0.5577093362808228,
+      "seed": 1234,
+      "rawboost": 4,
+      "init": "pretrained"
+    }
+  },
+  "dhwani_backend": {
+    "onnx_sha256": "d1c232bf4d7990526804b375c15804c0ee4e9b566478b908c5a57431491b7342",
+    "adapter": "detectors/dhwani_backend.py",
+    "integrated_in_commit": "5b9af863287d2fd8e8ab75349f442a346f5bfb8d",
+    "status": "selectable inference backend only; not in training"
+  },
+  "manifests": {
+    "indic (v0 train)": "b42fa068aa43eead71412f5feafd0deb4fae08c091eacf501c310fff2a7ffa5c",
+    "mixed (v1 train)": "4c0fe9fb36393e5ab7c2b6c9811291a5f3596cd9f337bf7056b441d2811b3b8a",
+    "mixed_v2": "48f1f430ed8f21b2571f802db27efbfa4cc9f804fa1fbc029863292a490aa16a",
+    "mixed_v3": "a05c28c4411183d341b6775ff08b92fa15c1b1720b63db589a12538fe8c060bc",
+    "external2 (HELD-OUT TEST)": "306b8674d0de8e5b4f801cffe86c85da89f2b3b03a939219fee3b07ab1bb09ba"
+  },
+  "config_sha256": "d04422262d9d784e239bc11efd60842b7a3f6f0be8f4f2ea0189fc4d0bdec18d",
+  "preprocessing_sha256": "b8f8145129b62f50fe9422a851c810bd859125a2c278045419fef10f7ac19a6a",
+  "dependency_lock_sha256": "30673c2964ea5eb0ca8824a4fd4a0be371a190d80c1b0fa7ca4fabb3a11aed59",
+  "seeds": {
+    "training": 1234,
+    "split": 0,
+    "bootstrap": 0
+  }
+}
