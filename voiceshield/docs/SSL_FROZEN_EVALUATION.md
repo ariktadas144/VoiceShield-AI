@@ -173,3 +173,26 @@ whether Spectra has memorised FLEURS by scoring FLEURS *speakers* it should not 
 against fresh genuine speech from the same recording conditions. If the model is clean,
 this is the strongest candidate this project has produced. If it is contaminated, cells C
 and D collapse and only B survives — still an improvement, but a much smaller one.
+
+---
+
+# ⚠️ SUPERSEDED — this evaluation used the wrong preprocessing
+
+Every number above was measured **without preemphasis and with a 64,400-sample window**.
+Spectra's published contract is **preemphasis 0.97 + 64,600 samples** (the card's own
+inference example, and the Arena's scoring record for this exact checkpoint). Re-scored
+correctly, every cell moves and the conclusions change:
+
+| cell | reported above | corrected |
+|---|---|---|
+| A | 12.78 | **1.35** |
+| B | 21.22 | **1.22** |
+| C | 1.14 | **0.15** |
+| D | 1.62 | **0.25** |
+
+In particular, this document's claim that **"A is a real regression, not a preprocessing
+artefact" is wrong** — it was entirely a preprocessing artefact. The per-language,
+per-generator, FLEURS-FPR, error-overlap and shortcut-audit figures above are all void.
+
+See `SPECTRA_PROVENANCE_AUDIT.md` for the corrected evaluation and the provenance
+findings. This file is kept only as the record of what was measured and why it was wrong.

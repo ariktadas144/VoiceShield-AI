@@ -32,19 +32,25 @@ import torch
 
 PKG = Path(__file__).resolve().parents[1]
 NB_SAMP, SR = 64_400, 16_000
+PREEMPH = 0.97
 
 
-def load_clip(p: Path) -> np.ndarray:
+def load_clip(p: Path, nb_samp: int = NB_SAMP, preemph: float | None = None) -> np.ndarray:
     y, sr = sf.read(p, dtype="float32", always_2d=True)
     y = y.mean(axis=1)
     if sr != SR and y.size:
         import soxr
         y = soxr.resample(y, sr, SR).astype(np.float32)
     if y.size == 0:
-        return np.zeros(NB_SAMP, dtype=np.float32)
-    if len(y) >= NB_SAMP:
-        return np.ascontiguousarray(y[:NB_SAMP])
-    return np.ascontiguousarray(np.tile(y, int(NB_SAMP / len(y)) + 1)[:NB_SAMP])
+        return np.zeros(nb_samp, dtype=np.float32)
+    # The card's own example applies torchaudio preemphasis BEFORE windowing, and the
+    # Arena scored it that way too ("FP32, preemphasis (0.97), deterministic first
+    # window"). Our first pass omitted it; --preemph reproduces the published contract.
+    if preemph:
+        y = np.concatenate([y[:1], y[1:] - preemph * y[:-1]]).astype(np.float32)
+    if len(y) >= nb_samp:
+        return np.ascontiguousarray(y[:nb_samp])
+    return np.ascontiguousarray(np.tile(y, int(nb_samp / len(y)) + 1)[:nb_samp])
 
 
 def main() -> int:
@@ -54,6 +60,10 @@ def main() -> int:
     ap.add_argument("--external", default="data/external2")
     ap.add_argument("--batch", type=int, default=8)
     ap.add_argument("--out", default="results/spectra_scores.jsonl")
+    ap.add_argument("--nb-samp", type=int, default=NB_SAMP,
+                    help="64400 = the model's own d_args; 64600 = the card example and Arena")
+    ap.add_argument("--preemph", type=float, default=0.0,
+                    help="0.97 reproduces the card/Arena contract; 0 disables")
     args = ap.parse_args()
 
     sys.path.insert(0, str(PKG / args.model))
@@ -85,7 +95,7 @@ def main() -> int:
                 paths.append(p); keep.append(r)
         if not paths:
             continue
-        X = np.stack([load_clip(p) for p in paths])
+        X = np.stack([load_clip(p, args.nb_samp, args.preemph or None) for p in paths])
         t0 = time.perf_counter()
         with torch.no_grad():
             lg = m(torch.from_numpy(X).float().to(dev))
