@@ -1,171 +1,207 @@
-# VoiceGuard — Indic adaptation
+# VoiceGuard — Indic speech deepfake detection
+
+A RawNet2 detector for distinguishing genuine human speech from synthetic speech in
+**Hindi, Tamil, Telugu, Malayalam and English**.
 
 Fork of [`Mrkomiljon/voiceguard`](https://github.com/Mrkomiljon/voiceguard) (`88c0f44`),
-adapted to run on Indic-language speech. The original upstream README is preserved as
-`README.upstream.md`.
-
-**Scope:** make the existing RawNet2 detector work correctly and reproducibly on Indic
-speech. Not a streaming service, benchmark platform, or production system.
-
----
-
-## What the adaptation rests on
-
-**VoiceGuard is the official ASVspoof 2021 RawNet2 baseline with a second head bolted
-on.** Diffed against `asvspoof-challenge/2021` `LA/Baseline-RawNet2/model.py`, the only
-differences are the author comment, `SincConv(sample_rate=16000 -> 24000)`, the head
-rename plus an added 7-class LibriSeVoc head, and a tuple return. SincConv,
-`Residual_block`, all six blocks, the attention FCs and the GRU are byte-identical.
-
-So the official pretrained weights transfer, and `tests/test_equivalence.py` proves the
-adapted model is not merely loadable but **numerically identical** to the official one:
-
-| | |
-|---|---|
-| Tensors matched | **119 / 123**, 0 unexpected |
-| Parameters restored | **17,623,671 / 18,680,446 = 94.3 %** |
-| Uninitialised | only the LibriSeVoc 7-class head, which the Indic path disables |
-| Logit agreement | `torch.equal == True` on all probe signals (max abs Δ **0.000e+00**) |
-
-The two-key rename (`fc1_gru -> fc1_binary_gru`, `fc2_gru -> fc2_binary_gru`) plus
-`sample_rate: 16000` is the entire adaptation.
-
-### 16 kHz is required, not preferred
-
-`SincConv` has **zero learnable parameters** — its filter bank is recomputed from
-`sample_rate` on every forward and is **not stored in the checkpoint**. The official
-weights were trained against a 16 kHz bank. Loading them into a model built at this
-fork's old 24000 default raises no error; it just feeds trained weights a filter bank
-they have never seen. `weights/load_pretrained.py` asserts the rate rather than
-trusting the caller.
+which is itself the official ASVspoof 2021 RawNet2 baseline with a second head added. The
+architecture is unchanged — the work here is data, training distribution and evaluation.
 
 ---
 
 ## Quickstart
 
 ```bash
-uv venv --python 3.11 .venv && uv pip install --python .venv/bin/python -r requirements.txt
-source .venv/bin/activate
+git clone git@github.com:ariktadas144/VoiceShield-AI.git
+cd VoiceShield-AI && git checkout feat/voiceguard-indic-adaptation
+cd voiceguard
 
-# 1. Verify the pretrained weights (expects 119/123, 0 unexpected)
-python weights/load_pretrained.py
+python3.11 -m venv .venv                       # 3.14 has no wheels for these pins
+.venv/bin/pip install -r requirements.lock.txt
 
-# 2. Prove the adaptation is numerically exact
-pytest tests/ -v
-
-# 3. Build Indic manifests. --streaming avoids the full ~19 GB download.
-python data/build_indic.py --streaming --limit 2000 --report-shortcut   # quick
-python data/build_indic.py --report-shortcut                            # full
-
-# 4. Fine-tune from the official weights
-python main.py --manifests data/indic --init pretrained --batch_size 32
-
-# 5. Per-language evaluation
-python benchmark/evaluate.py --split test --compare-unnormalized --out results.json
-
-# 6. Score one file
-python eval.py --input_path clip.wav --lang Hindi
+.venv/bin/python detect.py --backend voiceguard --audio yourclip.wav
 ```
 
-The checkpoint is not committed (70.5 MB). Download it from
-`https://www.asvspoof.org/asvspoof2021/pre_trained_DF_RawNet2.zip` into `weights/`;
-`weights/PROVENANCE.md` records the SHA-256, which the loader verifies.
+```
+P(fake)         : 0.000002
+P(real)         : 0.999998
+threshold       : 0.331564
+verdict         : BONAFIDE
+latency         : 189.4 ms
+```
+
+Defaults to **iv15**, the best all-round model. Checkpoints are self-contained — each
+carries its own config, dev-fitted threshold, class index and audio contract — so no
+external files are needed to score audio.
+
+```bash
+# a specific model
+.venv/bin/python detect.py --backend voiceguard \
+    --checkpoint checkpoints_f5_trimmed/best_model.pth --audio clip.wav
+
+# machine-readable, with per-window detail
+.venv/bin/python eval.py --model_path checkpoints_f5_iv15/best_model.pth \
+    --input_path clip.wav --lang Tamil --json
+
+# the alternative pretrained backend (see docs/DETECTOR_BACKENDS.md)
+.venv/bin/python detect.py --backend dhwani --audio clip.wav
+```
+
+The audio contract (16 kHz, peak normalisation, silence trimming) is read **from the
+checkpoint**, not assumed. Scoring a trimmed-audio model on untrimmed audio silently costs
+11.5 points of detection, so the code refuses to guess.
+
+---
+
+## Models
+
+Five checkpoints ship with the repo. All were evaluated on the same held-out benchmark.
+
+| model | A | B | C | D | FLEURS FPR | role |
+|---|---|---|---|---|---|---|
+| `frozen/voiceguard-indic-v0.1` | — | — | — | — | — | first frozen adaptation |
+| `checkpoints_v1` | 1.68 | 26.14 | 10.61 | 49.75 / 0.478 | 26.2 % | safe baseline |
+| `checkpoints_f5_trimmed` | 2.02 | **17.97** | 14.39 | 47.12 / 0.523 | 40.0 % | best unseen-spoof |
+| **`checkpoints_f5_iv15`** | **1.68** | 25.49 | 9.76 | 47.38 / 0.533 | 16.2 % | **best all-round — default** |
+| `checkpoints_asdg_bal` | 1.68 | 30.97 | **7.48** | 44.12 / 0.576 | **13.0 %** | best external-bonafide |
+
+EER %, lower is better. D also shows ROC-AUC.
+
+### What A/B/C/D mean
+
+The 2×2 matrix crosses *where the genuine speech came from* with *which generator made the
+spoof*, because a single pooled number hides which half is failing.
+
+| cell | genuine speech | spoof | question |
+|---|---|---|---|
+| **A** | internal | internal | in-domain accuracy |
+| **B** | internal | **unseen generators** | does it catch attacks it never trained on? |
+| **C** | **unseen corpus** | internal | does it trust real speakers it never heard? |
+| **D** | **unseen corpus** | **unseen generators** | both at once — the realistic case |
+
+### Per-generator detection
+
+XTTS-v2 and FreeVC24 are **never trained on**. SPRING_F5 is in the training distribution;
+the figures below are for held-out speakers.
+
+| model | xtts_v2 | freevc24 | SPRING_F5 |
+|---|---|---|---|
+| v1 | 41.2 % | 13.5 % | 3.2 % |
+| f5-trimmed | 47.8 % | 40.0 % | 90.3 % |
+| **iv15** | 32.5 % | 13.5 % | 88.5 % |
+| asdg-bal | 29.2 % | 15.2 % | 88.9 % |
+
+### Honest status
+
+**No model satisfies every criterion at once.** Seven experiments — four changing the data,
+three changing the training objective — all moved along the same trade-off:
+
+```
+better unseen-REAL robustness  <-->  better unseen-FAKE detection
+```
+
+The diagnosed cause is that unseen genuine speech and unseen generators **overlap
+acoustically**: the training population nearest to FLEURS is also the one nearest to
+XTTS-v2 and FreeVC24, so claiming that region as "real" fixes false accusations and blinds
+the detector in the same act. iv15 is shipped as the default because it is the best
+compromise, not because the problem is solved. See `docs/ASDG_EXPERIMENT.md`.
 
 ---
 
 ## Data
 
-[`SherryT997/IndicTTS-Deepfake-Challenge-Data`](https://huggingface.co/datasets/SherryT997/IndicTTS-Deepfake-Challenge-Data),
-revision `57347517658ae989597d8cef303cffb647ed2434`, **CC-BY-4.0**, 31,102 labelled
-train rows across 16 Indian languages.
+### Training
 
-Two properties were measured rather than read off the card, and both changed the
-pipeline:
+| corpus | role | licence |
+|---|---|---|
+| [SherryT997/IndicTTS-Deepfake-Challenge-Data](https://huggingface.co/datasets/SherryT997/IndicTTS-Deepfake-Challenge-Data) | genuine + spoof, 5 languages | CC-BY-4.0 |
+| [OpenSLR SLR63/65/66](https://openslr.org) | genuine, ta/te/ml crowdsourced read | CC-BY-SA-4.0 |
+| [ai4bharat/IndicVoices](https://huggingface.co/datasets/ai4bharat/IndicVoices) | genuine, spontaneous/conversational | CC-BY-4.0 |
+| [SPRINGLab/SPRING_F5](https://huggingface.co/SPRINGLab/SPRING_F5) | spoof generator (F5-TTS flow-matching) | Apache-2.0 |
 
-**The audio is not 16 kHz.** The HF feature declares `Audio(sampling_rate=16000)`, but
-all 360 files sampled from the served assets decode at **44,100 Hz**. `datasets`
-resamples on access; the files do not. The builder casts explicitly and asserts.
+### Held out — never trained on
 
-**There is a loudness shortcut.** Measured over 360 clips, 9 languages, balanced:
+| corpus | role | licence |
+|---|---|---|
+| [google/fleurs](https://huggingface.co/datasets/google/fleurs) | unseen genuine speech | CC-BY-4.0 |
+| [vdivyasharma/IndicSynth](https://huggingface.co/datasets/vdivyasharma/IndicSynth) | unseen spoof — XTTS-v2, FreeVC24 | **CC-BY-NC-4.0, evaluation only** |
 
-| | median duration | median RMS | median peak |
-|---|---|---|---|
-| REAL (`is_tts=0`) | 5.35 s | **−23.45 dB** | **0.501** |
-| FAKE (`is_tts=1`) | 5.41 s | **−28.00 dB** | **0.313** |
+The 1,800-clip external set is the only unseen benchmark in the project. Every A/B/C/D
+number depends on it staying unseen. **Do not train on it.** IndicSynth is
+non-commercial-licensed and is used solely as a measuring instrument.
 
-Single-feature AUC: **peak 0.227**, **RMS 0.268**, duration 0.499, ZCR 0.462. Real audio
-sits ~4.5 dB louder, so peak amplitude alone separates the classes at ≈0.77 AUC with no
-synthesis modelling at all.
+### Evaluated and rejected
 
-Per-utterance peak normalisation (on by default) denies the model that cue. It is
-applied in `audio_utils` at load time, **not** baked into the stored files, so training
-and inference share one transform and `--no-normalise` genuinely toggles it at both
-ends. On a 400-clip streamed sample `--report-shortcut` measured peak AUC **0.086 raw →
-0.544 after normalisation**, and `benchmark/evaluate.py --compare-unnormalized` showed
-**EER 36.08 % normalised vs 29.52 % un-normalised** — the un-normalised figure looks
-better precisely because it is partly reading loudness rather than synthesis. Reporting
-the pair keeps that visible instead of letting it hide inside a headline number.
-
-### What this data cannot support
-
-There is **no speaker field and no generator field**. `id` is
-`LANG_GENDER_CATEGORY_INDEX` with a scheme that differs per language
-(`ASM_F_ANGER_00342`, `te_f_books_…`, `gujaratifemale_…`), too irregular to parse a
-speaker from. So **speaker-disjoint and generator-disjoint splits are impossible**, and
-no claim of unseen-speaker or unseen-generator generalisation may be made from it. What
-is enforced: **language-stratified**, **text-disjoint**, duration-filtered splits.
-
-The official test split carries `is_tts = -1` on every row — labels are withheld for the
-challenge — so it cannot serve as a held-out set. It is left untouched and our
-train/dev/test is cut from the labelled train partition.
-
----
-
-## Upstream bugs: fixed, worked around, and deliberately left alone
-
-| Item | Action |
+| candidate | why rejected |
 |---|---|
-| `load_data()` ignored its `split` argument and globbed everything — train/dev/test were the same list | **Fixed** (manifest-driven) |
-| `main.py` fed hand-crafted features to a raw-waveform model while `eval.py` fed raw audio | **Fixed** — both now import `audio_utils` |
-| `criterion()` called on the `(binary, multi)` tuple | **Fixed** |
-| `requirements.txt` UTF-16 (`pip install -r` fails), pinned `torch==2.0.1` | **Fixed** |
-| `eval.py`'s `if (i+1) == range(...)` — int vs range, never true, dropped the final segment | **Fixed** |
-| `RawNet.__init__` mutates the caller's config dict | **Worked around** with `copy.deepcopy` |
-| `Residual_block.forward` discards its pre-activation (`out = self.conv1(x)`) | **Left alone** |
+| SPRINGLab/Indic-Mio (Apache-2.0) | MioCodec spectral signature separable at AUC 0.735 after trimming — a shortcut |
+| RawBoost channel augmentation | made external-bonafide false accusations worse (FPR 46.6 %) |
+| Mozilla Common Voice (CC0) | access broken — loading-script deprecation, no parquet conversion |
+| ai4bharat/Shrutilipi (CC-BY-4.0) | 141 GB for four languages, no speaker IDs |
 
-The last two are **verbatim upstream in the official ASVspoof baseline**, not fork
-defects. The config mutation is handled at call sites rather than by patching
-`model.py`. The dead pre-activation is left exactly as-is: it is what the pretrained
-checkpoint was trained with, so "fixing" it would break weight compatibility and void
-comparability with published RawNet2 numbers.
-
----
-
-## Claims
-
-**Supported:** VoiceGuard's existing RawNet2 detector was adapted and evaluated on
-multilingual Indic speech using an official pretrained anti-spoofing initialisation and
-a reproducible Indic real/fake dataset; bit-exact equivalence to the official baseline;
-per-language EER with bootstrap CIs; the measured loudness shortcut and its mitigation.
-
-**Not supported:** unseen-speaker generalisation · unseen-generator generalisation ·
-production readiness · government deployment clearance · "Indic-aware architecture"
-(the architecture is unchanged — the *data* is Indic) · any claim about which TTS
-systems produced the synthetic side, which the dataset does not document.
+Also used: [Aratako/MioCodec-25Hz-24kHz](https://huggingface.co/Aratako/MioCodec-25Hz-24kHz)
+(MIT) for the rejected Indic-Mio pilot, and
+[openai/whisper-large-v3-turbo](https://huggingface.co/openai/whisper-large-v3-turbo)
+(MIT) as an ASR round-trip quality check.
 
 ---
 
 ## Layout
 
 ```
-model.py                  RawNet2 — architecture untouched; only SincConv's sample_rate
-                          became configurable
-audio_utils.py            the one front end, imported by training AND inference
-metrics.py                EER, DET, operating-point rates, bootstrap CIs
-weights/load_pretrained.py  two-key rename + strict load checks + rate assertion
-data/build_indic.py       manifests: resample, normalise, stratify, text-disjoint split
-main.py                   fine-tuning; checkpoint selected on dev EER
-benchmark/evaluate.py     per-language EER / FPR / FNR with CIs, dev-fitted threshold
-eval.py                   single-file scoring, both backends
-tests/                    equivalence + front-end regression tests
+model.py  audio_utils.py  metrics.py     detector, shared front end, EER/AUC
+main.py                                  training
+train_asdg.py  train_asdg_balanced.py    domain-adversarial variants
+eval.py  detect.py  detectors/           inference; selectable VoiceGuard/Dhwani backend
+data/build_*.py  data/gen/               dataset construction and spoof generation
+benchmark/                               2x2 matrix, shortcut audits, safety, leakage gates
+checkpoints_*/  frozen/                  trained models + training curves
+data/*/manifest.jsonl                    every clip, with sha256 and generation seed
+results/                                 every reported number, as produced
+docs/                                    pilots, pre-registrations, diagnoses
 ```
+
+Audio, generator weights and virtualenvs are **not** in git — see
+[`docs/MIGRATION.md`](docs/MIGRATION.md) for sizes, pinned revisions and rebuild commands.
+Manifests carry per-clip sha256 and generation seeds, so the audio is reproducible.
+
+---
+
+## Reproducing
+
+```bash
+.venv/bin/python weights/load_pretrained.py --ckpt pre_trained_DF_RawNet2.pth  # 119/123
+.venv/bin/pytest tests/test_equivalence.py                                     # torch.equal
+.venv/bin/python benchmark/mixed_audit.py --trim --manifest data/mixed_f5_iv15/manifest.jsonl
+.venv/bin/python benchmark/matrix2x2.py --models iv15=checkpoints_f5_iv15/best_model.pth \
+    --internal data/mixed_f5_iv15 --external data/external2
+```
+
+Every training run was **pre-registered** before it started — predictions, and what would
+falsify them, recorded in `docs/` and committed ahead of the run. Where a prediction was
+wrong, the document says so.
+
+---
+
+## What this does and does not support
+
+**Supported.** Per-language EER/AUC with bootstrap CIs on Indic speech; measured behaviour
+on two generators never trained on; measured false-accusation rates on a genuine corpus
+never trained on; a reproducible pipeline pinned to dataset revisions and checksums.
+
+**Not supported.** Production readiness. Any claim of solving the real/fake trade-off —
+it is documented, not solved. Speaker-level claims for Hindi, where the source corpus has
+no speaker IDs and splits are clip-disjoint only. Malayalam synthesis quality, which is
+unverified because no permissively-licensed ASR available to us transcribes it well enough
+to measure (Whisper scores 64.7 % CER on *genuine* Malayalam).
+
+## Further reading
+
+| document | |
+|---|---|
+| [`ADAPTATION_FOUNDATION.md`](docs/ADAPTATION_FOUNDATION.md) | why the ASVspoof weights transfer exactly; why 16 kHz is mandatory |
+| [`SPOOF_GENERATION_PILOT.md`](docs/SPOOF_GENERATION_PILOT.md) | generator selection, shortcut audit, why Indic-Mio was rejected |
+| [`F5_EXTERNAL_BONAFIDE_REGRESSION.md`](docs/F5_EXTERNAL_BONAFIDE_REGRESSION.md) | the safety regression, four hypotheses tested and refuted |
+| [`ASDG_EXPERIMENT.md`](docs/ASDG_EXPERIMENT.md) | domain-adversarial training; why it failed twice, and differently each time |
+| [`DETECTOR_BACKENDS.md`](docs/DETECTOR_BACKENDS.md) | the selectable Dhwani backend |
+| [`MIGRATION.md`](docs/MIGRATION.md) | what is not in git, and how to rebuild it |
