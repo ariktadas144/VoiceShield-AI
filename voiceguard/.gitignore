@@ -1,26 +1,51 @@
+# Virtualenvs -- rebuild from requirements.lock.txt / requirements-gen.lock.txt
 .venv/
+.venv-gen/
 __pycache__/
 *.pyc
 
-# Pretrained weights are vendored by checksum, not committed (70.5 MB).
-# See weights/PROVENANCE.md for the source URL and SHA-256.
+# Generator model weights (9.5 GB). Re-fetch by pinned revision + sha256 from
+# generators/DOWNLOAD_RECORD.json; the EMA slim export is described in
+# generators/spring_f5/checkpoints/EMA_EXTRACTION.json.
+generators/**/*.safetensors
+generators/**/*.pt
+generators/**/*.onnx
+generators/**/*.bin
+generators/*/f5_tts/
+generators/*/.cache/
+generators/*/README.md
+
+# Audio. 46,078 wav files, ~6.5 GB. Every manifest carries a per-clip sha256, and the
+# SPRING_F5 clips carry their generation seed, so the audio is reproducible from the
+# manifests that ARE tracked here. See docs/MIGRATION.md.
+data/*/audio/
+
+# Source corpora as downloaded (OpenSLR wav, IndicVoices parquet, MMS). The small
+# line-index transcripts under data/openslr_raw are kept, the audio is not.
+data/openslr_raw/*/
+data/mms_raw/
+data/indicvoices_raw/*/
+
+# Vendored ASVspoof 2021 baseline weights (70.5 MB) -- see weights/PROVENANCE.md for
+# the source URL and checksum.
 weights/*.pth
-*.pth
 
-# Generated Indic manifests and cached audio
-data/indic/
-data/cache/
+# Scratch
+*.tmp
+_tmp_*.txt
 
-# Pilot audio is reproducible from the manifests: every clip records its generator
-# revision, per-clip seed and sha256. 339 MB of wav stays on disk, out of git.
-data/pilot_refs/audio/
-data/pilot_spoof/*/audio/
-generators/*/*.safetensors
-generators/*/*.pt
-generators/*/*.onnx
-.venv-gen/
-data/f5_train/audio/
-data/f5_long/audio/
-data/mixed_f5/*.txt
-data/indicvoices_raw/
-data/indicvoices/audio/
+# --- overrides for the repo-root .gitignore ---
+# VoiceShield-AI's top-level .gitignore excludes *.pth/*.pt/*.onnx/*.wav globally, which
+# is right for the app but would drop the trained detectors. These twelve checkpoints are
+# the irreplaceable output of the experiment series -- training has GPU nondeterminism, so
+# unlike the audio they cannot be regenerated bit-for-bit. 71 MB each, inside GitHub's
+# 100 MB per-file limit. Audio stays excluded.
+# Only the five checkpoints the documentation actually cites are tracked: the frozen
+# v0.1, the v1 safe baseline, f5-trimmed (best unseen-spoof), iv15 (best all-round) and
+# asdg-bal (best FLEURS). The seven historical checkpoints stay local -- their training
+# curves are kept as history.json, which is what the write-ups reference.
+!checkpoints_v1/best_model.pth
+!checkpoints_f5_trimmed/best_model.pth
+!checkpoints_f5_iv15/best_model.pth
+!checkpoints_asdg_bal/best_model.pth
+!frozen/*.pth

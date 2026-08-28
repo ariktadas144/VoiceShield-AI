@@ -1,0 +1,52 @@
+{
+  "plan": {
+    "Hindi": {
+      "real": 1000,
+      "fake_total": 999,
+      "fake_sherry": 500,
+      "fake_f5": 499,
+      "have": 100,
+      "to_generate": 399,
+      "train": 349,
+      "dev": 75,
+      "test": 75
+    },
+    "Tamil": {
+      "real": 959,
+      "fake_total": 955,
+      "fake_sherry": 478,
+      "fake_f5": 477,
+      "have": 100,
+      "to_generate": 377,
+      "train": 334,
+      "dev": 72,
+      "test": 71
+    },
+    "Telugu": {
+      "real": 1000,
+      "fake_total": 1000,
+      "fake_sherry": 500,
+      "fake_f5": 500,
+      "have": 100,
+      "to_generate": 400,
+      "train": 350,
+      "dev": 75,
+      "test": 75
+    },
+    "Malayalam": {
+      "real": 1004,
+      "fake_total": 996,
+      "fake_sherry": 498,
+      "fake_f5": 498,
+      "have": 100,
+      "to_generate": 398,
+      "train": 349,
+      "dev": 75,
+      "test": 74
+    }
+  },
+  "totals": {
+    "f5": 1974,
+    "need": 1574
+  }
+}
