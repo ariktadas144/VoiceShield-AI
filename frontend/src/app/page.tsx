@@ -4,8 +4,9 @@ import { useQuery } from '@tanstack/react-query';
 import { fetchStats } from '@/lib/api';
 import { useGatewayStore } from '@/stores/gateway-store';
 import { Activity, Copy, CheckCircle2, XCircle, Smartphone, Server, Cpu, Database, Radio, Network, ArrowRight } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { FusionControl } from '@/components/ui/FusionControl';
+import { SessionPlayer, type SessionPlayerHandle } from '@/components/ui/SessionPlayer';
 import { PipelineTest } from '@/components/ui/PipelineTest';
 import { SimulatorTest } from '@/components/ui/SimulatorTest';
 
@@ -242,10 +243,26 @@ function LivePipeline() {
                 <h4 className="text-xs font-semibold tracking-widest text-slate-500 mb-4 uppercase flex items-center gap-2">
                   <Activity className="w-4 h-4" /> Real-time ML Pipeline
                 </h4>
+
+                <div className="mb-4">
+                  <SessionPlayer
+                    ref={(h) => { playerRefs.current[session.sessionId] = h; }}
+                    chunks={sessionChunks}
+                    activeSequence={activeChunk[session.sessionId] ?? null}
+                    onActiveChange={(seq) =>
+                      setActiveChunk((m) => ({ ...m, [session.sessionId]: seq }))}
+                  />
+                </div>
                 
                 <div className="flex gap-4 overflow-x-auto pb-4 snap-x">
                   {sessionChunks.map(chunk => (
-                    <div key={chunk.sequence} className="snap-start shrink-0 w-64 bg-slate-900/60 backdrop-blur-md rounded-2xl p-5 border border-slate-800/80 hover:border-indigo-500/50 transition-colors group">
+                    <div key={chunk.sequence}
+                         onClick={() => playerRefs.current[session.sessionId]?.seek(chunk.sequence)}
+                         className={`snap-start shrink-0 w-64 backdrop-blur-md rounded-2xl p-5 border transition-all cursor-pointer group ${
+                           activeChunk[session.sessionId] === chunk.sequence
+                             ? 'bg-indigo-950/60 border-indigo-400 ring-2 ring-indigo-500/50 scale-[1.02]'
+                             : 'bg-slate-900/60 border-slate-800/80 hover:border-indigo-500/50'
+                         }`}>
                       <div className="text-xs text-slate-400 font-mono flex justify-between items-center mb-4">
                         <span className="bg-slate-800 px-2 py-1 rounded text-[10px]">CHUNK {chunk.sequence}</span>
                         <span>{chunk.durationMs}ms</span>
@@ -321,6 +338,10 @@ function LivePipeline() {
 }
 
 export default function Overview() {
+  // Which chunk the local playback head is currently inside, per session.
+  const [activeChunk, setActiveChunk] = useState<Record<string, number | null>>({});
+  const playerRefs = useRef<Record<string, SessionPlayerHandle | null>>({});
+
   const { data: stats } = useQuery({ queryKey: ['stats'], queryFn: fetchStats, refetchInterval: 5000 });
   const status = useGatewayStore(s => s.status);
   const network = useGatewayStore(s => s.network);
